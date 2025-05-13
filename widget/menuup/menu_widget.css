@@ -1,0 +1,451 @@
+
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css");
+@import url('https://fastly.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');
+
+.os-style-menu-widget {
+    border-radius: 12px;
+    box-shadow: 0 3px 2px rgb(from var(--mbd-color) r g b / 30%);
+    overflow: visible;
+    width: 120px;
+    font-family: galmuri9;
+    display: block;
+    margin: 0 auto;
+    position: fixed;
+    top: var(--me-top);
+    left: var(--me-left);
+    color: var(--mt-color);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    box-sizing: border-box;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgb(from var(--mln-color) r g b / 10%);
+    z-index: 100000;
+}
+
+.os-style-menu-widget::before {
+    content: "";
+    width: 120px;
+    position: absolute;
+    height: 100%;
+    background: var(--mbg-color);
+    border-radius: 12px;
+    opacity: 0.4;
+}
+
+.os-style-menu-widget .menu-header {
+    text-align: left;
+    padding: 2px 6px 0px;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgb(from var(--mt-color) r g b / 90%);
+    font-family: galmuri11;
+    z-index: 1;
+    min-height: 20px;
+    cursor: grab;
+    user-select: none;
+    background: rgb(from var(--mbg-color) r g b / 30%);
+    border-radius: 12px 12px 0px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.os-style-menu-widget .menu-header:active {
+    cursor: grabbing;
+}
+
+/* .os-style-menu-widget .menu-header .user-info {
+    padding: 2px 6px 0px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.os-style-menu-widget .menu-header .user-info a.header-icon {
+    color: rgb(from var(--mt-color) r g b / 90%);
+} */
+
+.user-info-submenu {
+    position: absolute;
+    top: 25px;
+    left: 15px;
+    width: 150px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgb(from var(--mt-color) r g b / 50%);
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    display: none;
+    overflow: hidden;
+}
+
+.user-info-submenu.active::before {
+    content: "";
+    width: 100%;
+    position: absolute;
+    height: 100%;
+    background: var(--mbg-color);
+    border-radius: 4px;
+    opacity: 0.7;
+    z-index: -1;
+}
+
+.user-info-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--mt-color);
+    transition: color 0.2s;
+    padding: 10px;
+    margin: -10px;
+}
+
+.user-info-btn:hover {
+    color: rgb(from var(--mt-color) r g b / 90%);
+}
+
+
+.user-info-submenu.active {
+    display: block;
+}
+
+.user-info-item {
+    padding: 4px 6px;
+    transition: background-color 0.2s;
+}
+
+.user-info-item:hover {
+    color: rgb(from var(--mh-color) r g b / 10%);
+    background-color: rgb(from var(--mt-color) r g b / 20%);
+}
+
+.user-info-item a {
+    display: flex;
+    align-items: center;
+    color: var(--mt-color);
+    text-decoration: none;
+}
+
+.user-info-item span {
+    font-family: 'Galmuri11';
+    font-size: 11px;
+}
+
+.user-info-item a:hover {
+    color: var(--mh-color);
+}
+
+.user-info-item i {
+    margin-right: 3px;
+    width: 16px;
+    text-align: center;
+}
+
+.os-style-menu-widget .main-menu {
+    list-style: none;
+    padding: 5px 8px 8px 8px;
+    margin: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+    box-sizing: border-box;
+}
+
+.os-style-menu-widget .menu-item.center-align {
+    grid-column: 1 / span 2;
+    width: 60px;
+    margin: 0 auto;
+}
+
+.os-style-menu-widget .menu-item.center-align > a,
+.os-style-menu-widget .menu-item.center-align .folder-item {
+    justify-content: center;
+}
+
+.os-style-menu-widget .menu-item {
+    position: relative;
+    width: 100%;
+    margin-bottom: 0;
+    padding: 0;
+}
+.os-style-menu-widget .menu-item > a,
+.os-style-menu-widget .folder-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+    border-radius: 6px;
+    text-align: center;
+    padding: 5px 0px;
+}
+
+.os-style-menu-widget .menu-item > a:hover,
+.os-style-menu-widget .folder-item:hover,
+.os-style-menu-widget .menu-item.active > a {
+    background-color: rgb(from var(--mt-color) r g b / 15%);
+}
+
+.os-style-menu-widget .menu-icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    opacity: 0.9;
+    color: rgb(from var(--mt-color) r g b / 90%);
+    transition: transform 0.2s ease, color 0.2s ease;
+    position: relative;
+}
+
+.os-style-menu-widget .menu-item > a:hover .menu-icon,
+.os-style-menu-widget .folder-item:hover .menu-icon {
+    color: var(--mh-color);
+    transform: scale(1.1);
+}
+
+.os-style-menu-widget .menu-item > a:active .menu-icon,
+.os-style-menu-widget .folder-item:active .menu-icon {
+    animation: icon-pop 0.5s ease;
+}
+
+@keyframes icon-pop {
+    0% {
+        transform: scale(1.1);
+    }
+    40% {
+        transform: scale(1.6);
+    }
+    100% {
+        transform: scale(1.0);
+    }
+}
+
+.os-style-menu-widget .menu-icon img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.os-style-menu-widget .menu-icon i {
+    font-size: 18px;
+}
+
+.os-style-menu-widget .menu-text {
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    font-family: galmuri9;
+    opacity: 0.85;
+    font-weight: 400;
+    max-width: 100%;
+    line-height: 1.2;
+	color: var(--mln-color);
+}
+
+/* 권한이 없는 메뉴 */
+.menu-restricted {
+    opacity: 0.5;
+    cursor: default;
+    pointer-events: none;
+}
+
+.menu-restricted a:hover,
+.menu-restricted .folder-item:hover {
+    background-color: transparent !important;
+    color: var(--mt-color) !important;
+}
+
+.os-style-menu-widget .menu-divider {
+    height: 1px;
+    background-color: rgb(from var(--mln-color) r g b / 15%);
+    grid-column: 1 / span 2;
+}
+
+.os-style-menu-widget .submenu-indicator {
+    position: absolute;
+    top: 2px;
+    right: 1px;
+    transition: transform 0.2s ease;
+    opacity: 0.6;
+    font-size: 8px;
+    background: rgb(from var(--mbd-color) r g b / 30%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.os-style-menu-widget .menu-item.open > .folder-item .submenu-indicator {
+    transform: rotate(90deg);
+}
+
+.os-style-menu-widget .sub-menu {
+    list-style: none;
+    padding: 5px;
+    margin: 0;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s ease;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    width: 120px;
+    background: rgb(from var(--mp-color) r g b / 85%);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgb(from var(--mbd-color) r g b / 30%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgb(from var(--mbg-color) r g b / 30%);
+    z-index: 100;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0px;
+}
+
+.os-style-menu-widget .sub-menu li .menu-icon,
+.os-style-menu-widget .sub-menu li .menu-text  {
+    color: var(--mbg-color);
+}
+
+.os-style-menu-widget .sub-menu li:hover .menu-icon,
+.os-style-menu-widget .sub-menu li:hover .menu-text {
+    color: var(--mh-color);
+}
+
+.os-style-menu-widget .menu-item:nth-child(even) .sub-menu {
+    left: auto;
+    right: 100%;
+}
+
+.os-style-menu-widget .menu-item.open > .sub-menu {
+    max-height: 500px;
+    opacity: 1;
+    visibility: visible;
+}
+
+.os-style-menu-widget .sub-menu .menu-item > a,
+.os-style-menu-widget .sub-menu .folder-item {
+    padding: 6px 4px;
+    font-size: 10px;
+}
+
+.os-style-menu-widget .full-width-item {
+    grid-column: 1 / span 2;
+}
+
+.os-style-menu-widget .menu-minimize-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 14px;
+    height: 14px;
+    font-size: 10px;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--mln-color);
+    border-radius: 50%;
+    background-color: var(--mt-color);
+    border: 1px solid;
+    transition: background-color 0.2s;
+    border-color: rgb(from var(--mln-color) r g b / 70%);
+}
+
+.os-style-menu-widget .menu-minimize-btn:hover {
+    background-color: var(--mh-color);
+}
+
+.os-style-menu-widget.minimized .main-menu {
+    display: none;
+}
+
+.os-style-menu-widget.minimized .menu-minimize-btn i {
+    transform: rotate(90deg);
+}
+
+/* 닉네임을 드래그 핸들로 스타일링 */
+.os-style-menu-widget .user-nickname {
+    cursor: move;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* 모바일 환경에서 닉네임 드래그 핸들 강화 */
+@media screen and (max-width: 768px) {
+    .os-style-menu-widget .user-nickname {
+        padding: 3px 7px;
+        position: relative;
+        display: inline-block;
+    }
+    .os-style-menu-widget .user-nickname::before {
+        content: '⋮⋮';
+        margin-right: 5px;
+        opacity: 0.5;
+        font-size: 10px;
+        vertical-align: middle;
+        position: absolute;
+        left: 0;
+    }
+}
+
+/* 모바일 토글 버튼 스타일 */
+#mobile-menu-toggle {
+    display: none; /* 기본적으로 숨김 */
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: 30px;
+    height: 30px;
+    background: rgb(from var(--mh-color) r g b / 85%);
+    color: var(--mt-color);
+    border-radius: 50%;
+    z-index: 1000;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-items: center;
+    justify-content: center;
+}
+
+#mobile-menu-toggle:hover {
+    background: rgb(from var(--mt-color) r g b / 85%);
+    color: var(--mh-color);
+}
+
+/* 모바일 환경에서만 토글 버튼 표시 */
+@media screen and (max-width: 768px) {
+    #mobile-menu-toggle {
+        display: flex;
+    }
+    
+    /* 메뉴 위젯 초기 상태 (화면 밖으로) */
+    .os-style-menu-widget {
+        position: fixed;
+        top: 80px !important; /* 상단에 고정 */
+        left: -300px !important; /* 화면 밖으로 숨김 */
+        transform: scale(1.3) !important;
+        transition: left 0.3s ease;
+    }
+
+    /* 메뉴 활성화 상태 */
+    .os-style-menu-widget.active {
+        left: 30px !important; /* 화면 안으로 표시 */
+    }
+}
