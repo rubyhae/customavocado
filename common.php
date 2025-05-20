@@ -439,6 +439,7 @@ if ($_SESSION['ss_mb_id']) { // 로그인중이라면
     // 자동로그인 end ---------------------------------------
 }
 
+$is_mine = $character['ch_id'] == $ch_id ? true : false;
 
 $write = array();
 $write_table = "";

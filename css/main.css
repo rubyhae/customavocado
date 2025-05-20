@@ -21,7 +21,7 @@
 	메인 슬라이드 배너
 ****************************************************/
 
-#main_visual_box {min-height:100px; background:#000; margin-bottom:20px;}
+#main_visual_box {min-height:100px; background: transparent; margin-bottom:20px;}
 
 
 /****************************************************

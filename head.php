@@ -28,75 +28,14 @@ if($logo_data)	$logo_data.= " />";
 ?>
 
 <!-- 헤더 영역 -->
-<?php include_once(G5_PATH.'/widget/menuup/menu_widget.php'); ?>
 <header id="header">
-	<div class="fix-layout">
-		<!-- 로고 영역 : PC 로고 / 모바일 로고 동시 출력 - 디자인 사용을 체크하지 않을 시, 제대로 출력되지 않을 수 있습니다. -->
-		<!-- 관리자 기능을 사용하지 않고 로고를 넣고 싶을 시, < ? = $ log_data ? > 항목을 제거 하고 <img> 태그를 넣으세요. -->
-		<h1 id="logo">
-			<a href="<?=G5_URL?>/main.php">
-				<?=$logo_data?>
-			</a>
-		</h1>
 
-		<!-- 모바일 모드에서 메뉴를 열고 닫기 할 수 있는 버튼 -->
-		<a href="#gnb" id="gnb_control_box">
-			<img src="<?=G5_IMG_URL?>/ico_menu_control_pannel.png" alt="메뉴열고닫기" />
-		</a>
-		<script>
-		$('#gnb_control_box').on('click', function() {
-			$('body').toggleClass('open-gnb');
-			return false;
-		});
-		</script>
-		<!-- 모바일 메뉴 열고 닫기 버튼 종료 -->
+    <div class="fix-layout">
 
+        <?include(G5_PATH."/menu.php");?>
 
-		<div id="gnb">
-			<?
-			$menu_content = get_site_content('site_menu');
-			if($menu_content) { 
-				echo $menu_content;
-			} else { 
-			?>
-			
-				<ul id="no_design_gnb">
-					<li>
-						<a href="<?=G5_URL?>/bbs/board.php?bo_table=notice">
-							공지사항
-						</a>
-					</li>
-					<li>
-						<a href="<?=G5_URL?>/bbs/board.php?bo_table=story">
-							스토리
-						</a>
-					</li>
-					<li>
-						<a href="<?=G5_URL?>/bbs/content.php?co_id=system">
-							시스템
-						</a>
-					</li>
-					<li>
-						<a href="<?=G5_URL?>/search">
-							조사게시판
-						</a>
-					</li>
-					<li>
-						<a href="<?=G5_URL?>/shop">
-							상점
-						</a>
-					</li>
-					<li>
-                        <a href="<?=G5_URL?>/room/index.php?ch_id={ch_id}>">
-                            마이룸
-						</a>
-					</li>
-				</ul>
-				<? include(G5_PATH."/templete/txt.bgm.php"); ?>
+    </div>
 
-			<?php } ?>
-		</div>
-	</div>
 </header>
 <!-- // 헤더 영역 -->
 

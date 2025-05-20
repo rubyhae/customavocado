@@ -76,7 +76,7 @@ if($sql) {
     </table>
 </div>
 
-<div class="btn_win02 btn_win">
+<div class="btn_confirm01 btn_confirm">
     <button type="button" class="btn_cancel" onclick="window.close();">창닫기</button>
 </div>
 

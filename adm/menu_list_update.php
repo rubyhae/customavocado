@@ -1,5 +1,5 @@
 <?php
-$sub_menu = "100290";
+$sub_menu = "100340";
 include_once('./_common.php');
 
 check_demo();
@@ -17,8 +17,43 @@ $group_code = null;
 $primary_code = null;
 $count = count($_POST['code']);
 
+$site_path = G5_DATA_PATH.'/site';
+$site_url = G5_DATA_URL.'/site';
+
+@mkdir($site_path, G5_DIR_PERMISSION);
+@chmod($site_path, G5_DIR_PERMISSION);
+
 for ($i=0; $i<$count; $i++)
 {
+$img_link = $_POST['me_img'][$i];
+if ($_FILES['me_img_file']['name'][$i]) {
+    if (!preg_match("/\.(gif|jpg|png)$/i",$_FILES['me_img_file']['name'][$i])) {
+        alert("이미지가 gif, jpg, png 파일이 아닙니다.");
+    } else {
+		// 확장자 따기
+		$exp = explode(".", $_FILES['me_img_file']['name'][$i]);
+		$exp = $exp[count($exp)-1]; 
+ 
+		$image_name = time().$i.".".$exp;  
+		upload_file($_FILES['me_img_file']['tmp_name'][$i], $image_name, $site_path);
+		$img_link = $site_url."/".$image_name;
+	}
+}
+$img_link2 = $_POST['me_img2'][$i];
+if ($_FILES['me_img2_file']['name'][$i]) {
+    if (!preg_match("/\.(gif|jpg|png)$/i",$_FILES['me_img2_file']['name'][$i])) {
+        alert("이미지가 gif, jpg, png 파일이 아닙니다.");
+    } else {
+		// 확장자 따기
+		$exp = explode(".", $_FILES['me_img2_file']['name'][$i]);
+		$exp = $exp[count($exp)-1]; 
+ 
+		$image_name = time().$i."_o.".$exp;  
+		upload_file($_FILES['me_img2_file']['tmp_name'][$i], $image_name, $site_path);
+		$img_link2 = $site_url."/".$image_name;
+	}
+}
+
     $_POST = array_map_deep('trim', $_POST);
 
     $code    = $_POST['code'][$i];
@@ -56,13 +91,16 @@ for ($i=0; $i<$count; $i++)
 
     // 메뉴 등록
     $sql = " insert into {$g5['menu_table']}
-                set me_code         = '{$me_code}',
-                    me_name         = '{$me_name}',
-                    me_link         = '{$me_link}',
+                set me_code         = '$me_code',
+                    me_name         = '$me_name',
+                    me_link         = '$me_link',
+                    me_img			= '{$img_link}',
+                    me_img2			= '{$img_link2}',
                     me_target       = '{$_POST['me_target'][$i]}',
                     me_order        = '{$_POST['me_order'][$i]}',
                     me_use          = '{$_POST['me_use'][$i]}',
-                    me_mobile_use   = '{$_POST['me_mobile_use'][$i]}' ";
+                    me_mobile_use   = '{$_POST['me_use'][$i]}',
+                    me_level		= '{$_POST['me_level'][$i]}' ";
     sql_query($sql);
 }
 
