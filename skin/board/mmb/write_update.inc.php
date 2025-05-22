@@ -166,6 +166,7 @@ if($w != 'cu') {
 					limit 0, 1
 			");
 
+			
 			if($item_result['it_id']) {
 				// 아이템 획득에 성공한 경우, 해당 아이템을 인벤토리에 삽입
 				// 아이템 획득에 성공 시
@@ -220,6 +221,178 @@ if($w != 'cu') {
 		if(!$make_2['it_use_ever']) { delete_inventory($make_2['in_id']); }
 		if(!$make_3['it_use_ever']) { delete_inventory($make_3['in_id']); }
 	}
+
+	/******************************************************
+		위치이동 커맨드 추가
+	******************************************************/	
+	if($action == 'MAP') { 
+		
+		// 위치이동 선택 시, 선택한 위치를 이동한다.
+		// 이동 지역 정보 받아오기
+		$ma = sql_fetch("select * from {$g5['map_table']} where ma_id = '{$re_ma_id}'");
+		if($ma['ma_id']) { 
+			// 위치정보가 정상적으로 넘어왔을 시
+			// 지역 변동내역을 캐릭터 정보에 추가한다.
+			$sql = " update {$g5['character_table']}
+						set ma_id = '{$ma['ma_id']}'
+					  where ch_id = '{$character['ch_id']}' ";
+			sql_query($sql);
+			$character['ma_id'] = $ma['ma_id'];
+
+			$m_re_type = "F";		// 이벤트 타입 저장
+			$event_log_conttent = ""; // 이벤트 로그 내용
+
+			// 이벤트를 검색한다.
+			// 이벤트 검색 시작
+			$seed = rand(0, 100);
+
+			$me = sql_fetch("
+				select *
+					from {$g5['map_event_table']}
+					where	ma_id = '".$ma['ma_id']."'
+						and (me_per_s <= '{$seed}' and me_per_e >= '{$seed}')
+						and me_use = '1'
+						and (me_replay_cnt = 0 or me_replay_cnt > me_now_cnt)
+					order by RAND()
+					limit 0, 1
+			");
+			
+			if($me['me_id']) {
+				// 이벤트 획득에 성공한 경우, 해당 이벤트를 실행한다.
+				// 이벤트 획득 카운터 추가
+				$sql = " update {$g5['map_event_table']}
+							set me_now_cnt = me_now_cnt+1
+						  where me_id = '{$me['me_id']}' ";
+				sql_query($sql);
+
+				if($me['me_type'] == '') { 
+					// 일반 텍스트 출력
+					$m_re_type = "D";
+
+				} else if($me['me_type'] == '아이템') { 
+					// 아이템 획득
+					$m_re_type = "I";
+
+					// 아이템 획득에 성공한 경우, 해당 아이템을 인벤토리에 삽입
+					// 아이템 획득에 성공 시
+					$item_result = get_item($me['me_get_item']);
+					insert_inventory($character['ch_id'], $item_result['it_id']);
+					$event_log_conttent = $item_result['it_name'].j($item_result['it_name'], '을')." 획득했다!";
+
+				} else if($me['me_type'] == '화폐') { 
+					// 소지금 변동
+					$m_re_type = "G";
+					insert_point($member['mb_id'], $me['me_get_money'], "이벤트 발생!", 'money', time(), '이벤트');
+
+					if($me['me_get_money'] < 0) { 
+						$event_log_conttent = ($me['me_get_money'] * -1).$config['cf_money'].j($config['cf_money'], '을')." 잃었다.";
+					} else {
+						$event_log_conttent = $me['me_get_money'].$config['cf_money'].j($config['cf_money'], '을')." 획득했다!";
+					}
+				} else if($me['me_type'] == '이동') { 
+					// 지역 이동
+					$m_re_type = "W";
+					$m_map = sql_fetch("select ma_name from {$g5['map_table']} where ma_id = '{$me['me_move_map']}'");
+
+					// 지역 변동내역을 캐릭터 정보에 추가한다.
+					$sql = " update {$g5['character_table']}
+								set ma_id = '{$me['me_move_map']}'
+							  where ch_id = '{$character['ch_id']}' ";
+					sql_query($sql);
+					$character['ma_id'] = $me['me_move_map'];
+
+					$event_log_conttent = "[".$m_map['ma_name']."] 구역으로 이동되었다!";
+
+				} else if($me['me_type'] == '몬스터') { 
+					// 몬스터 출현
+					$m_re_type = "M";
+
+					$temp_check = sql_fetch("select * from {$write_table}");
+					if(!isset($temp_check['wr_mon_state'])) { 
+						sql_query(" ALTER TABLE `{$write_table}` ADD `wr_mon_state` varchar(255) NOT NULL default '' AFTER `wr_10` ");
+						sql_query(" ALTER TABLE `{$write_table}` ADD `wr_mon_hp` int(11) NOT NULL default '0' AFTER `wr_10` ");
+						sql_query(" ALTER TABLE `{$write_table}` ADD `wr_mon_now_hp` int(11) NOT NULL default '0' AFTER `wr_10` ");
+						sql_query(" ALTER TABLE `{$write_table}` ADD `wr_mon_attack` int(11) NOT NULL default '0' AFTER `wr_10` ");
+					}
+					unset($temp_check);
+
+					// 몬스터 상태 추가
+					$customer_sql .= " , wr_mon_state='S', wr_mon_hp='{$me['me_mon_hp']}', wr_mon_now_hp='{$me['me_mon_hp']}', wr_mon_attack='{$me['me_mon_attack']}' ";
+				}
+			}
+
+			$log = $action."||{$ma['ma_id']}||{$m_re_type}||{$me['me_id']}||{$event_log_conttent}";
+			$customer_sql .= " , wr_log = '{$log}' ";
+			$customer_sql .= " , ma_id = '{$character['ma_id']}' ";
+		}
+	}
+	if($action == 'MAP_MON') { 
+		// 위치 이동 시, 몬스터가 떴을 경우 몬스터 이벤트 처리
+		// :: 현재 공격력 산정은 주사위 2개를 굴려서 나오는 합으로 처리 되고 있습니다.
+		// 몬스터 공격력
+		// 몬스터 hp 체크 - 끝나면 엔딩 표기
+		// 유저 HP 체크 (현재 플러그인 배포 버전에서는 hp 처리 하는 부분 제외, 필요 시 추가 커스텀 필요)
+		// 몬스터 딜 체크 필요
+		$origin = sql_fetch("select * from {$write_table} where wr_id = '{$wr_id}'");
+		$mon_hp = $origin['wr_mon_now_hp'];
+		$mon_attack = $origin['wr_mon_attack'];
+		$mon_state = $origin['wr_mon_state'];
+		/*
+		/*********************************
+			공격력 산출 부분
+			: 커뮤니티의 공격력 산출 공식에 맞게 변경하세요
+		*********************************/
+		$dice_attack1 = rand(1, 6);		// 첫번째 주사위
+		$dice_attack2 = rand(1, 6);		// 두번째 주사위
+		$attack = $dice_attack1 + $dice_attack2;		// 주사위1 + 주사위2 = 공격력
+
+		// $it : 위쪽에서 아이템 사용하기에서 설정 된 사용된 아이템 정보가 들어있는 변수
+		// 아이템 효과 : 공격력추가 기능을 설정 시, 공격력이 추가 된 수치를 얻을 수 있음, 추가되는 공격력 수치는 아이템관리-적용값에 설정된 값
+		$item_attack = 0;				// 아이템으로 추가 되는 공격력 수치
+		if($it['it_type'] == '공격력추가') {
+			$item_attack = $it['it_value'];
+			$attack += $item_attack; // 기존의 공격력 합산에 아이템 공격력을 추가한다.
+		}
+
+		// 최종 몬스터에게 입힌 데미지 산출 공식
+		$result_attack = $mon_attack - $attack;		// 몬스터 반격치에서 최종 공격력 수치를 제외한다.
+
+		if($mon_hp > 0) { 
+
+			if($result_attack > 0) {
+				// 몬스터의 공격력 > 유저의 공격력
+
+				/****************************************************************************************
+					유저의 HP를 차감하는 공식이 추가 되어야 하는 부분
+
+					* 커스텀된 소스를 추가하세요
+
+				****************************************************************************************/
+
+			} else if($result_attack < 0) { 
+				// 몬스터의 공격력 < 유저의 공격력
+
+				$mon_hp = $mon_hp + $result_attack;
+				if($mon_hp < 0) {
+					// 막타일 경우 이벤트 종료 선언
+					$mon_hp = 0;
+					$mon_state = 'E';
+				}
+				$sql = " update {$write_table}
+						set wr_mon_now_hp = '{$mon_hp}',
+							wr_mon_state = '{$mon_state}'
+					  where wr_id = '{$wr_id}' ";
+				sql_query($sql);
+			}
+
+			$log = $action."||{$mon_state}||".$mon_attack."||".$attack."||유저의HP정보||".$dice_attack1."+".$dice_attack2."+".$item_attack;
+			$customer_sql .= " , wr_log = '{$log}' ";
+		}
+	}
+	
+	/******************************************************
+		위치이동 커맨드 추가 종료
+	******************************************************/	
 }
 
 ?>

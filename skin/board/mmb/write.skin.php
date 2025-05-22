@@ -128,7 +128,7 @@ if(!$is_error) {
 		if(!$write['wr_subject']) $write['wr_subject'] = 'GUEST';
 	}
 
-	$temp_sql = "select ch_thumb, mb_id, ch_id, ch_name from {$g5['character_table']} where ch_state = '승인' and ch_type != 'test' and ch_id != '{$character['ch_id']}' order by ch_type asc, ch_name asc";
+	$temp_sql = "select ch_thumb, mb_id, ch_id, ch_name from {$g5['character_table']} where ch_state = '승인' and ch_type != 'test' and ch_id != '{$character[$ch_id]}' order by ch_type asc, ch_name asc";
 	$re_ch_result = sql_query($temp_sql);
 	$re_ch = array();
 	for($i = 0; $row = sql_fetch_array($re_ch_result); $i++) {
@@ -174,15 +174,12 @@ if(!$is_error) {
 					</select>
 				</dt>
 				<dd>
-					<div id="add_UPLOAD" <?=$write['wr_type'] == "URL" ? "style='display: none;'" : ""?>>
-						<input type="file" id="wr_file" name="bf_file[]" title="로그등록 :  용량 <?php echo $upload_max_filesize ?> 이하만 업로드 가능" class="frm_file frm_input view_image_area" />
-						<?php if($w == 'u' && $file[0]['file']) { ?>
-							<input type="checkbox" id="bf_file_del0" name="bf_file_del[0]" value="1"> <label for="bf_file_del0"><?php echo $file[0]['source'].'('.$file[0]['size'].')';  ?> 로그 삭제</label>
-						<?php } ?>
-					</div>
-					<div id="add_URL" <?=$write['wr_type'] != "URL" ? "style='display: none;'" : ""?>>
-						<input type="text" name="wr_url" value="<?=$write['wr_url']?>" title="이미지 링크를 가져와 주시길 바랍니다." id="wr_url" class="frm_input view_image_area" placeholder="이미지 링크 입력"/>
-					</div>
+                    <div id="add_UPLOAD">
+                        <input type="file" id="wr_file" name="bf_file[]" title="로그등록 :  용량 <?php echo $upload_max_filesize ?> 이하만 업로드 가능" class="frm_file frm_input view_image_area" />
+                    </div>
+                    <div id="add_URL">
+                        <input type="text" name="wr_url" value="<?=$write['wr_url']?>" title="이미지 링크를 가져와 주시길 바랍니다." id="wr_url" class="frm_input view_image_area" placeholder="이미지 링크 입력"/>
+                    </div>
 				</dd>
 			</dl>
 			
@@ -208,22 +205,20 @@ if(!$is_error) {
 							<? if($config['cf_5']) { ?>
 								<option value="H">조합</option>
 							<? } ?>
+							<?
+							/******************************************************
+								위치이동 커맨드 추가
+							******************************************************/
+							if($config['cf_use_map']) { ?>
+								<option value="MAP">위치이동</option>
+							<? } 
+							/******************************************************
+								위치이동 커맨드 추가 종료
+							******************************************************/
+							?>
 							</select>
 						</dd>
 					</dl>
-
-					<div class="comment-data" id="action_Z">
-					<?
-						// 다이스 관련 입력
-					?>
-						<dl>
-							<dt style="font-size: 12px;">다이스 개수</dt>
-							<dd>
-								<input type="text" name="dice_count" id="dice_count" value="" style="width: 50px;"/> 개 굴립니다.
-							</dd>
-						</dl>
-						
-					</div>
 
 					<div class="comment-data" id="action_H">
 					<?
@@ -281,7 +276,41 @@ if(!$is_error) {
 							</dd>
 						</dl>
 					</div>
-					
+
+					<? 
+					/******************************************************
+								위치이동 커맨드 추가
+					******************************************************/	
+						if($config['cf_use_map']) { 
+					?>
+					<div class="comment-data" id="action_MAP">
+					<?
+						// 위치 이동 커멘드 관련
+						// 현재 위치에서 이동이 가능한 칸만 가져온다
+						$map = sql_fetch("select * from {$g5['map_table']} where ma_id = '{$character['ma_id']}'");
+						$able_sql = "select * from {$g5['map_move_table']} where mf_start = '{$character['ma_id']}' and mf_use = '1'";
+						$map_able = sql_query($able_sql);
+					?>
+						<dl>
+							<dt>위치이동</dt>
+							<dd>
+								<select name="re_ma_id" id="re_ma_id" >
+									<option value="<?=$character['ma_id']?>">[현재위치 유지] <?=$map['ma_name']?></option>
+								<? for($i=0; $mable = sql_fetch_array($map_able); $i++) { 
+									$end_map = sql_fetch("select ma_name from {$g5['map_table']} where ma_id = '{$mable['mf_end']}'");
+								?>
+									<option value="<?=$mable['mf_end']?>">[위치이동] <?=$map['ma_name']?> ▶ <?=$end_map['ma_name']?></option>
+								<? } ?>
+								<select>
+							</dd>
+						</dl>
+					</div>
+					<? }
+					/******************************************************
+								위치이동 커맨드 추가 종료
+					******************************************************/	
+					?>
+
 				</div>
 			<? } ?>
 
@@ -495,22 +524,17 @@ if(!$is_error) {
 		}
 
 <? if($w == '') { ?>
-		if(f.wr_type.value == 'UPLOAD') {
-			if(document.getElementById('wr_file').value == '') { 
-				alert("업로드할 로그를 등록해 주시길 바랍니다.");
-				return false;
-			}
-		} else if(f.wr_type.value == 'URL') { 
-			if(document.getElementById('wr_url').value == '') { 
-				alert("등록할 로그 URL을 입력해 주시길 바랍니다.");
-				return false;
-			}
-		}
+    if(f.wr_type.value == 'UPLOAD' && document.getElementById('wr_file').value == '') {
+        alert("업로드할 로그를 등록해 주시길 바랍니다.");
+        return false;
+    }
+    if(f.wr_type.value == 'URL' && document.getElementById('wr_url').value == '') {
+        alert("등록할 로그 URL을 입력해 주시길 바랍니다.");
+        return false;
+    }
 <? } ?>
-		document.getElementById("btn_submit").disabled = "disabled";
-		return true;
-	}
-
+document.getElementById("btn_submit").disabled = "disabled";
+return true;
 
 	$('.view_image_area').on('change', function() {
 		var image = $(this).val();

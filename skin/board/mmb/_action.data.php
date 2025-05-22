@@ -17,9 +17,29 @@ $log_type = $data_log[0];
 
 $item_log = explode("||", $item_log);
 
-if($log_type) { 
-	include($board_skin_path."/action/log.{$log_type}.skin.php");
+if($log_type == 'S') { 
+	/** 탐색 로그 출력 **/
+	include($board_skin_path."/action/log.S.skin.php");
 }
+if($log_type == 'H') { 
+	/** 조합 로그 출력 **/
+	include($board_skin_path."/action/log.H.skin.php");
+}
+
+/******************************************************
+		위치이동 커맨드 추가
+******************************************************/	
+if($log_type == 'MAP') { 
+	/** 맵 로그 출력 **/
+	include($board_skin_path."/action/log.map.skin.php");
+}
+if($log_type == 'MAP_MON') { 
+	/** 맵 몬스터 이벤트 출력 **/
+	include($board_skin_path."/action/log.map_mon.skin.php");
+}
+/******************************************************
+		위치이동 커맨드 추가 종료
+******************************************************/	
 
 
 if($item_log[0]) { 

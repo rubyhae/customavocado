@@ -43,6 +43,25 @@ if ($is_comment_write) {
 			<input type="radio" name="action" id="action_<?=$list_item['wr_id']?>_S" value="S" />
 			<label for="action_<?=$list_item['wr_id']?>_S">탐색&nbsp;&nbsp;&nbsp;&nbsp;</label>
 			<? } ?>
+
+			<?
+			/******************************************************
+					위치이동 커맨드 추가 - 몬스터 공략관련
+					- 같은 지역에 있는 유저들 끼리 공격 할 수 있다.
+					- 해당 조건을 제거하고 싶다면 아래의 [  && $list_item['ma_id'] == $character['ma_id']  ] 코드 제거 할것
+					- 작성자만 공격이 가능하도록 하고 싶다면, $list_item['ma_id'] == $character['ma_id'] 이 조건을
+					  $list_item['mb_id'] == $member['mb_id'] 로 변경할것
+			******************************************************/	
+			if($list_item['wr_mon_state'] =='S' && $list_item['ma_id'] == $character['ma_id']) { ?>
+			<input type="radio" name="action" id="action_<?=$list_item['wr_id']?>_MAP_MON" value="MAP_MON" />
+			<label for="action_<?=$list_item['wr_id']?>_MAP_MON">몬스터 공략&nbsp;&nbsp;&nbsp;&nbsp;</label>
+			<? }
+			/******************************************************
+					위치이동 커맨드 추가 종료 - 몬스터 공략관련
+			******************************************************/	
+			?>
+
+
 		<? } ?>
 
 			<input type="checkbox" name="game" id="game_<?=$list_item['wr_id']?>" value="dice" />

@@ -26,6 +26,17 @@ $owner_behind = $owner_behind['cs_etc_3'];
 
 <div id="load_log_board">
 
+<?
+/******************************************************
+	위치이동 커맨드 추가 : 지도 표시 부분. 불필요할 시 제거
+******************************************************/	
+if($config['cf_use_map']) {
+	include_once($board_skin_path.'/list.top.map.skin.php');
+}
+/******************************************************
+	위치이동 커맨드 추가 종료
+******************************************************/	
+?>
 
 <!-- 자비란 상단 공지 부분 -->
 <? if($board['bo_content_head']) { ?>
@@ -143,6 +154,19 @@ $owner_behind = $owner_behind['cs_etc_3'];
 					$('#wr_file').replaceWith( $('#wr_file').clone(true) );
 				}
 				function fwrite_submit(f) {
+					if (document.getElementById("char_count")) {
+						if (char_min > 0 || char_max > 0) {
+							var cnt = parseInt(check_byte("wr_content", "char_count"));
+							if (char_min > 0 && char_min > cnt) {
+								alert("내용은 "+char_min+"글자 이상 쓰셔야 합니다.");
+								return false;
+							}
+							else if (char_max > 0 && char_max < cnt) {
+								alert("내용은 "+char_max+"글자 이하로 쓰셔야 합니다.");
+								return false;
+							}
+						}
+					}
 					if(f.wr_type.value == 'UPLOAD') {
 						if(document.getElementById('wr_file').value == '') { 
 							alert("업로드할 로그를 등록해 주시길 바랍니다.");
@@ -310,20 +334,13 @@ function comment_delete()
 }
 
 function comment_box(co_id, wr_id) { 
+	$('.modify_area').hide();
+	$('.original_comment_area').show();
 
-	if($('#c_'+co_id).find('.modify_area').is(':visible')) {
-		$('.modify_area').hide();
-		$('.original_comment_area').show();
-		co_id = '';
-		wr_id = '';
-	} else {
-		$('.modify_area').hide();
-		$('.original_comment_area').show();
+	$('#c_'+co_id).find('.modify_area').show();
+	$('#c_'+co_id).find('.original_comment_area').hide();
 
-		$('#c_'+co_id).find('.modify_area').show();
-		$('#c_'+co_id).find('.original_comment_area').hide();
-		$('#save_co_comment_'+co_id).focus();
-	}
+	$('#save_co_comment_'+co_id).focus();
 
 	var modify_form = document.getElementById('frm_modify_comment');
 	modify_form.wr_id.value = wr_id;
