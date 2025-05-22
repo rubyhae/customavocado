@@ -30,8 +30,14 @@ $tab_width = 1000; ?>
 <br><br>
 <a href="<?=G5_URL?>/"><li class="mini-item"><i class="material-icons mini-icon">home</i><div class="menu-txt">HOME</div></li></a>
 <div class=menu-line></div>
-<a href="<?=G5_URL?>/bbs/content.php?co_id=notice"?><li class="mini-item"><i class="material-icons mini-icon">announcement</i><div class="menu-txt">공지사항</div></li></a>
+<a href="<?=G5_URL?>/bbs/content.php?co_id=notice"><li class="mini-item"><i class="material-icons mini-icon">announcement</i><div class="menu-txt">공지사항</div></li></a>
+<a href="<?=G5_URL?>/bbs/board.php?bo_table=story"><li class="mini-item"><i class="material-icons mini-icon">auto_stories</i><div class="menu-txt">스토리</div></li></a>
+<a href="<?=G5_URL?>/bbs/content.php?co_id=system"><li class="mini-item"><i class="material-icons mini-icon">settings</i><div class="menu-txt">시스템</div></li></a>
+<div class=menu-line></div>
+<a href="<?=G5_URL?>/bbs/board.php?bo_table=search"><li class="mini-item"><i class="material-icons mini-icon">search</i><div class="menu-txt">조사게시판</div></li></a>
 <a href="<?=G5_URL?>/member"><li class="mini-item"><i class="material-icons mini-icon">groups</i><div class="menu-txt">멤버</div></li></a>
+<a href="<?=G5_URL?>/shop"><li clㄴass="mini-item"><i class="material-icons mini-icon">shopping_cart</i><div class="menu-txt">상점</div></li></a>
+<a href="<?=G5_URL?>/stock"><li class="mini-item" style="display: inline-block; white-space: nowrap; float: left;"><i class="material-icons mini-icon">query_stats</i> 주식</li><div class="menu-txt">주식</div></li></a>
 <div class=menu-line></div>
 <?if ($is_member){?>
 <?if($is_admin){?>
@@ -87,7 +93,7 @@ bgm_effect = setInterval(set_equalizer, 300);
   --menu-point:rgba(158, 168, 255, 0.842);
   --menu-point-trans:rgba(255,255,255,0.4);
   --menu-shadow:rgba(50, 88, 130, 0.32);
-  --menu-background:linear-gradient(to bottom, rgba(158, 168, 255, 0.842), rgba(248, 193, 255, 0.692));
+  --menu-background:linear-gradient(to bottom, rgba(88,114,165,0.30), rgba(223, 232, 255, 0.69));
 }
 
 <? /* 모바일 반응형---- */ ?>
