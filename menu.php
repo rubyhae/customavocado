@@ -26,75 +26,23 @@ $tab_width = 1000; ?>
 		* 원하실 경우 하단의 <div id="gnb"> ....  </div> 부분을 수정/삭제 해주세요.
 		**************************************************************/?> 
 
-<div class="mini-menu mini-menu3">
-<a href="<?=G5_URL?>"><li class="mini-item"><i class="material-icons mini-icon">home</i><div class="menu-txt">HOME</div></li></a>
+<div class="mini-menu mini-menu3 menu-open">
+<br><br>
+<a href="<?=G5_URL?>/"><li class="mini-item"><i class="material-icons mini-icon">home</i><div class="menu-txt">HOME</div></li></a>
 <div class=menu-line></div>
-<?
-	$sql = " select *
-	from {$g5['menu_table']}
-	where me_use = '1'
-	and length(me_code) = '2'
-	order by me_order*1, me_id ";
-	
-	$result = sql_query($sql, false); 
-	$count=sql_fetch($sql);
-	$menu_datas = array();
-	
-	if($count['me_id']){ 
-		$sql = " select *
-		from {$g5['menu_table']}
-		where me_use = '1'
-		and length(me_code) = '2'
-		order by me_order*1, me_id ";
-		$result = sql_query($sql, false); 
-		$menu_datas = array();
-
-		for ($i=0; $row=sql_fetch_array($result); $i++) {
-			$menu_datas[$i] = $row;
-
-			$sql2 = " select *
-			from {$g5['menu_table']}
-			where me_use = '1'
-			  and length(me_code) = '4'
-			  and substring(me_code, 1, 2) = '{$row['me_code']}'
-			order by me_order*1, me_id ";
-	
-			$result2 = sql_query($sql2);
-			for ($k=0; $row2=sql_fetch_array($result2); $k++) {
-				$menu_datas[$i]['sub'][$k] = $row2;
-			}
-
-		}
-
-		$i = 0;
-		foreach( $menu_datas as $row ){
-			if( empty($row) ) continue; 
-			if($row['me_name'] == '구분선') {?>
-				<div class=menu-line></div>
-			<?}else {
-				if($member['mb_level']>=$row['me_level']){?>
-				<a href="<?php echo $row['me_link']?>">
-				<li class="mini-item">
-				<i class="material-icons mini-icon"><?=$row['me_img']?></i>
-				<div class="menu-txt"><?=$row['me_name']?></div>
-				</li>
-				</a>
-			<?}}
-			$i++;
-		}
-	} 
-?> 
+<a href="<?=G5_URL?>/bbs/content.php?co_id=notice"?><li class="mini-item"><i class="material-icons mini-icon">announcement</i><div class="menu-txt">공지사항</div></li></a>
+<a href="<?=G5_URL?>/member"><li class="mini-item"><i class="material-icons mini-icon">groups</i><div class="menu-txt">멤버</div></li></a>
 <div class=menu-line></div>
 <?if ($is_member){?>
 <?if($is_admin){?>
-	<a href="<?=G5_ADMIN_URL?>" target="_blank"><li class="mini-item"><i class="material-icons mini-icon">settings</i><div class="menu-txt">ADMIN</div></li></a><?}if($is_member && !$is_admin){?>
-		<a href="<?php echo G5_BBS_URL ?>/member_confirm.php?url=register_form.php" id="ol_after_info"><li class="mini-item"><i class="material-icons mini-icon">construction</i><div class="menu-txt">MYPAGE</div></li></a><?}?>
-		<a href="<?php echo G5_BBS_URL ?>/logout.php" id="ol_after_logout"><li class="mini-item"><i class="material-icons mini-icon"><span class="material-icons-outlined">power_settings_new</i><div class="menu-txt">LOGOUT</div></li></a><?}else{?>
-			<a href="<?=G5_BBS_URL?>/login.php"><li class="mini-item"><i class="material-icons mini-icon"><span class="material-icons-outlined">power_settings_new</i><div class="menu-txt">LOGIN</div></li></a>
+	<a href="<?=G5_ADMIN_URL?>" target="_blank"><li class="mini-item"><i class="material-icons mini-icon">settings</i><div class="menu-txt">관리자</div></li></a><?}if($is_member && !$is_admin){?>
+		<a href="<?php echo G5_BBS_URL ?>/member_confirm.php?url=register_form.php" id="ol_after_info"><li class="mini-item"><i class="material-icons mini-icon">construction</i><div class="menu-txt">정보수정</div></li></a><?}?>
+		<a href="<?php echo G5_BBS_URL ?>/logout.php" id="ol_after_logout"><li class="mini-item"><i class="material-icons mini-icon"><span class="material-icons-outlined">power_settings_new</i><div class="menu-txt">로그아웃</div></li></a><?}else{?>
+		<a href="<?=G5_BBS_URL?>/login.php"><li class="mini-item"><i class="material-icons mini-icon"><span class="material-icons-outlined">power_settings_new</i><div class="menu-txt">로그인</div></li></a>
 			<?if($config['cf_1']){?>
-				<a href="<?php echo G5_BBS_URL ?>/register.php"><li class="mini-item"><i class="material-icons mini-icon">how_to_reg</i><div class="menu-txt">JOIN</div></li></a><?}?>
+				<a href="<?php echo G5_BBS_URL ?>/register.php"><li class="mini-item"><i class="material-icons mini-icon">how_to_reg</i><div class="menu-txt">회원가입</div></li></a><?}?>
 				<?}?>
-				<? if($config['cf_bgm']){?>
+				
 				<li class="mini-item"><a href="<?=G5_URL?>/bgm.php?action=play" target="bgm_frame" class="play playy music_btn" onclick="return fn_control_bgm('play')">
 			</a><div class="menu-txt onoff play2"></div></li>
 			<li class="mini-item"><a href="<?=G5_URL?>/bgm.php" target="bgm_frame" class="stop music_btn" onclick="return fn_control_bgm('stop')">
@@ -121,7 +69,6 @@ function fn_control_bgm(state) {
 }
 bgm_effect = setInterval(set_equalizer, 300);
 </script>
-<? } ?>
 </div>
 			
 			<? /**************************************************************
@@ -131,34 +78,16 @@ bgm_effect = setInterval(set_equalizer, 300);
 
 
 
-<? /* 아래는 스타일시트 */ 
-
-/** CSS 설정 가져오기 **/
-$css_sql = sql_query("select * from {$g5['css_table']}");
-$css = array();
-for($i=0; $cs = sql_fetch_array($css_sql); $i++) {
-	$css[$cs['cs_name']][0] = $cs['cs_value'];
-	$css[$cs['cs_name']][1] = $cs['cs_etc_1'];
-	$css[$cs['cs_name']][2] = $cs['cs_etc_2'];
-	$css[$cs['cs_name']][3] = $cs['cs_etc_3'];
-	$css[$cs['cs_name']][4] = $cs['cs_etc_4'];
-	$css[$cs['cs_name']][5] = $cs['cs_etc_5'];
-	$css[$cs['cs_name']][6] = $cs['cs_etc_6'];
-	$css[$cs['cs_name']][7] = $cs['cs_etc_7'];
-	$css[$cs['cs_name']][8] = $cs['cs_etc_8'];
-	$css[$cs['cs_name']][9] = $cs['cs_etc_9'];
-	$css[$cs['cs_name']][10] = $cs['cs_etc_10'];
-}
-?>
+<? /* 아래는 스타일시트 */ ?>
 <style>
 
 :root {
-  --menu-icon:<?=$css['menu_text'][0]?>;
-  --menu-text:<?=$css['menu_text'][0]?>;
-  --menu-point:<?=$css['menu_background'][1]?>;
-  --menu-point-trans:<?=$css['m_menu_background'][1]?>;
-  --menu-shadow:<?=$css['menu_text'][1]?>52;
-  --menu-background:linear-gradient(to bottom, <?=$css['menu_background'][1]?>, <?=$css['m_menu_background'][1]?>);
+  --menu-icon:#fff;
+  --menu-text:#000;
+  --menu-point:rgba(158, 168, 255, 0.842);
+  --menu-point-trans:rgba(255,255,255,0.4);
+  --menu-shadow:rgba(50, 88, 130, 0.32);
+  --menu-background:linear-gradient(to bottom, rgba(158, 168, 255, 0.842), rgba(248, 193, 255, 0.692));
 }
 
 <? /* 모바일 반응형---- */ ?>
@@ -178,8 +107,6 @@ for($i=0; $cs = sql_fetch_array($css_sql); $i++) {
 @media all and (max-width: 1000px) {
 #gnb_control_box {
     left: 10px !important;
-	top: 10px;
-	position: fixed;
   }
 }
 <? /* ----모바일 반응형 끝 */ ?>
@@ -199,19 +126,21 @@ for($i=0; $cs = sql_fetch_array($css_sql); $i++) {
   background-color:rgba(255,255,255,0.4);
 }
 .mini-menu {
-  transition: None;
-  width: 100px;
+  transition-property: width, margin-left;
+  transition-duration: 0.5s;
+  transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+  width: 34px;
   height:fit-content;
   border-radius: 12px;
   padding: 8px 0px;
-  background: transparent;
+  background: var(--menu-background);
   position:fixed;
   left:2%;
   margin-left:0%;
   top: 50%;
   transform: translateY(-50%);
   text-align: left; 
-  filter:drop-shadow(0px 1px 3px var(--menu-shadow));
+  filter:drop-shadow(0px 1px 3px rgba(50, 88, 130, 0.4));
   overflow: hidden;
   z-index: 15;
 }
@@ -228,13 +157,25 @@ for($i=0; $cs = sql_fetch_array($css_sql); $i++) {
 .play2 {
 }
 
+.play2:before {
+  content:"φ(*￣0￣)♬";
+}
+
 .stop2 {
 
+}
+.stop2:before {
+  content: "o(⊙﹏⊙)…";
 }
 .onoff {
 
 }
 
+
+.menu-open {
+  transition-duration: 0.5s;
+  width: 100px;
+}
 
 .mini-icon {
   color: var(--menu-icon);
@@ -242,7 +183,11 @@ for($i=0; $cs = sql_fetch_array($css_sql); $i++) {
 }
 
 .mini-icon2 {
-  display: none; 
+  color: var(--menu-icon);
+  border-radius: 100%;
+  margin: 3px 2px 3px 2px;
+  padding: 3px;
+  transform: rotate();
 }
 
 .menu-txt {
@@ -284,7 +229,7 @@ background-color: var(--menu-text);
 }
 .music_btn:before {
 content: "";
-color: var(--menu-point);
+color: var(--color-point);
 display: block;
 position: relative;
 text-indent: 0;
