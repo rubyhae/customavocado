@@ -10,6 +10,5 @@ $menu['menu500'] = array (
 	array('500900', $config['cf_money'].' 관리', ''.G5_ADMIN_URL.'/point_list.php', ''),
 );
 
-$menu['menu500'][] = array('500150', '주식 관리', G5_ADMIN_URL.'/offer_list.php', '');
 
 ?>

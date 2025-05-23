@@ -1,5 +1,5 @@
 <?php
-$sub_menu = "100340";
+$sub_menu = "100290";
 include_once('./_common.php');
 
 if ($is_admin != 'super')
@@ -9,6 +9,7 @@ if ($is_admin != 'super')
 if( !isset($g5['menu_table']) ){
     die('<meta charset="utf-8">dbconfig.php 파일에 <strong>$g5[\'menu_table\'] = G5_TABLE_PREFIX.\'menu\';</strong> 를 추가해 주세요.');
 }
+
 if(!sql_query(" DESCRIBE {$g5['menu_table']} ", false)) {
     sql_query(" CREATE TABLE IF NOT EXISTS `{$g5['menu_table']}` (
                   `me_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -23,28 +24,20 @@ if(!sql_query(" DESCRIBE {$g5['menu_table']} ", false)) {
                 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ", true);
 }
 
-$temp=sql_fetch("select * from {$g5['menu_table']}");
-if (!isset($temp['me_level'])) {
-	sql_query(" ALTER TABLE `{$g5['menu_table']}` ADD `me_level` int(11) NOT NULL DEFAULT '1' after `me_mobile_use`, ADD `me_img` varchar(255) NOT NULL DEFAULT '' after `me_name`", false);
-}
-if (!isset($temp['me_img2'])) {
-	sql_query(" ALTER TABLE `{$g5['menu_table']}` ADD `me_img2` varchar(255) NOT NULL DEFAULT '' after `me_img`", false);
-}
-
-$sql = " select * from {$g5['menu_table']} order by me_order*1, me_id ";
+$sql = " select * from {$g5['menu_table']} order by me_id ";
 $result = sql_query($sql);
 
 $g5['title'] = "메뉴설정";
 include_once('./admin.head.php');
 
-$colspan = 11;
+$colspan = 7;
 ?>
 
 <div class="local_desc01 local_desc">
     <p><strong>주의!</strong> 메뉴설정 작업 후 반드시 <strong>확인</strong>을 누르셔야 저장됩니다.</p>
 </div>
 
-<form name="fmenulist" id="fmenulist" method="post" action="./menu_list_update.php" onsubmit="return fmenulist_submit(this);" enctype="multipart/form-data">
+<form name="fmenulist" id="fmenulist" method="post" action="./menu_list_update.php" onsubmit="return fmenulist_submit(this);">
 <input type="hidden" name="token" value="">
 
 <div class="btn_add01 btn_add">
@@ -54,31 +47,14 @@ $colspan = 11;
 <div id="menulist" class="tbl_head01 tbl_wrap">
     <table>
     <caption><?php echo $g5['title']; ?> 목록</caption>
-	<colgroup>
-		<col style="width:100px;">
-		<col style="width:80px;">
-		<col>
-		<col style="width:80px;">
-		<col>
-		<col> 
-		<col style="width:80px;">
-		<col style="width:80px;">
-		<col style="width:80px;">
-		<col style="width:50px;">
-		<col style="width:80px;">
-	</colgroup>
     <thead>
     <tr>
         <th scope="col">메뉴</th>
-		<th scope="col" colspan="2">이미지
-			<?=help('* 사용하지 않을 경우 공란으로 남겨두시면 됩니다.')?></th>
-		<th scope="col" colspan="2">마우스오버
-			<?=help('* 사용하지 않을 경우 공란으로 남겨두시면 됩니다.')?></th>
         <th scope="col">링크</th>
         <th scope="col">새창</th>
         <th scope="col">순서</th>
-        <th scope="col">권한</th> 
-        <th scope="col">사용</th> 
+        <th scope="col">PC사용</th>
+        <th scope="col">모바일사용</th>
         <th scope="col">관리</th>
     </tr>
     </thead>
@@ -100,53 +76,43 @@ $colspan = 11;
     ?>
     <tr class="<?php echo $bg; ?> menu_list menu_group_<?php echo substr($row['me_code'], 0, 2); ?>">
         <td class="td_category<?php echo $sub_menu_class; ?>">
-            <input type="hidden" name="code[]" value="<?php echo substr($row['me_code'], 0, 2) ?>"> 
-            <input type="text" name="me_name[]" value="<?php echo $me_name; ?>" id="me_name_<?php echo $i; ?>" required class="required frm_input full_input" style="width:100%;">
+            <input type="hidden" name="code[]" value="<?php echo substr($row['me_code'], 0, 2) ?>">
+            <label for="me_name_<?php echo $i; ?>" class="sound_only"><?php echo $sub_menu_info; ?> 메뉴<strong class="sound_only"> 필수</strong></label>
+            <input type="text" name="me_name[]" value="<?php echo $me_name; ?>" id="me_name_<?php echo $i; ?>" required class="required frm_input full_input">
         </td>
         <td>
-            <?=$row['me_img'] ? '<img src="'.$row['me_img'].'" style="height:35px;">' : "-";?>
+            <label for="me_link_<?php echo $i; ?>" class="sound_only">링크<strong class="sound_only"> 필수</strong></label>
+            <input type="text" name="me_link[]" value="<?php echo $row['me_link'] ?>" id="me_link_<?php echo $i; ?>" required class="required frm_input full_input">
         </td>
-        <td class="txt-left"> 
-            <p>파일 <input type="file" name="me_img_file[]" " id="me_img_file_<?php echo $i; ?>" class=" frm_input full_input" style="width:80%"></p>
-            <p>외부링크 <input type="text" name="me_img[]" value="<?php echo $row['me_img'] ?>" id="me_img_<?php echo $i; ?>" class=" frm_input full_input" style="width:80%"></p>
-        </td>
-        <td>
-            <?=$row['me_img2'] ? '<img src="'.$row['me_img2'].'" style="height:35px;">' : "-";?>
-        </td>
-        <td class="txt-left"> 
-            <p>파일 <input type="file" name="me_img2_file[]" " id="me_img2_file_<?php echo $i; ?>" class=" frm_input full_input" style="width:80%"></p>
-            <p>외부링크 <input type="text" name="me_img2[]" value="<?php echo $row['me_img2'] ?>" id="me_img2_<?php echo $i; ?>" class=" frm_input full_input" style="width:80%"></p>
-        </td>
-        <td> 
-            <input type="text" name="me_link[]" value="<?php echo $row['me_link'] ?>" id="me_link_<?php echo $i; ?>" required class="required frm_input full_input" style="width:100%;">
-        </td>
-        <td class="td_mng"> 
+        <td class="td_mng">
+            <label for="me_target_<?php echo $i; ?>" class="sound_only">새창</label>
             <select name="me_target[]" id="me_target_<?php echo $i; ?>">
-                <option value="self"<?php echo get_selected($row['me_target'], 'self', true); ?>>현재창</option>
-                <option value="blank"<?php echo get_selected($row['me_target'], 'blank', true); ?>>새창</option> 
+                <option value="self"<?php echo get_selected($row['me_target'], 'self', true); ?>>사용안함</option>
+                <option value="blank"<?php echo get_selected($row['me_target'], 'blank', true); ?>>사용함</option>
             </select>
         </td>
-        <td class="td_num"> 
+        <td class="td_num">
+            <label for="me_order_<?php echo $i; ?>" class="sound_only">순서</label>
             <input type="text" name="me_order[]" value="<?php echo $row['me_order'] ?>" id="me_order_<?php echo $i; ?>" class="frm_input" size="5">
         </td>
-        <td class="td_num"> 
-			<select name="me_level[]" id="me_level_<?php echo $i; ?>">
-				<option value="1" <?=$row['me_level']=="1"? "selected":"";?> >1</option>
-				<option value="2" <?=$row['me_level']=="2"? "selected":"";?> >2</option>
-				<option value="3" <?=$row['me_level']=="3"? "selected":"";?> >3</option>
-				<option value="4" <?=$row['me_level']=="4"? "selected":"";?> >4</option>
-				<option value="5" <?=$row['me_level']=="5"? "selected":"";?> >5</option>
-				<option value="6" <?=$row['me_level']=="6"? "selected":"";?> >6</option>
-				<option value="7" <?=$row['me_level']=="7"? "selected":"";?> >7</option>
-				<option value="8" <?=$row['me_level']=="8"? "selected":"";?> >8</option>
-				<option value="9" <?=$row['me_level']=="9"? "selected":"";?> >9</option>
-				<option value="10" <?=$row['me_level']=="10"? "selected":"";?> >10</option> 
-			</select> 
+        <td class="td_mng">
+            <label for="me_use_<?php echo $i; ?>" class="sound_only">PC사용</label>
+            <select name="me_use[]" id="me_use_<?php echo $i; ?>">
+                <option value="1"<?php echo get_selected($row['me_use'], '1', true); ?>>사용함</option>
+                <option value="0"<?php echo get_selected($row['me_use'], '0', true); ?>>사용안함</option>
+            </select>
         </td>
-        <td class="td_mng"> 
-			<input type="checkbox" name="me_use[]" id="me_use_<?php echo $i; ?>" value="1" <?=$row['me_use']==1 ? "checked":"";?>> 
-        </td> 
-        <td class="td_mng"> 
+        <td class="td_mng">
+            <label for="me_mobile_use_<?php echo $i; ?>" class="sound_only">모바일사용</label>
+            <select name="me_mobile_use[]" id="me_mobile_use_<?php echo $i; ?>">
+                <option value="1"<?php echo get_selected($row['me_mobile_use'], '1', true); ?>>사용함</option>
+                <option value="0"<?php echo get_selected($row['me_mobile_use'], '0', true); ?>>사용안함</option>
+            </select>
+        </td>
+        <td class="td_mng">
+            <?php if(strlen($row['me_code']) == 2) { ?>
+            <button type="button" class="btn_add_submenu">추가</button>
+            <?php } ?>
             <button type="button" class="btn_del_menu">삭제</button>
         </td>
     </tr>
