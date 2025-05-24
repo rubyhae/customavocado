@@ -38,6 +38,7 @@ $tab_width = 1000; ?>
 <a href="<?=G5_URL?>/member"><li class="mini-item"><i class="material-icons mini-icon">groups</i><div class="menu-txt">멤버</div></li></a>
 <a href="<?=G5_URL?>/shop"><li clㄴass="mini-item"><i class="material-icons mini-icon">shopping_cart</i><div class="menu-txt">상점</div></li></a>
 <a href="<?=G5_URL?>/stock"><li class="mini-item"><i class="material-icons mini-icon">query_stats</i><div class="menu-txt">주식</div></li></a>
+<a href="<?=G5_URL?>/bbs/content.php?co_id=room"><i class="material-icons mini-icon">bed</i><div class="menu-txt">마이룸</div></a>
 <div class=menu-line></div>
 <?if ($is_member){?>
 <?if($is_admin){?>
