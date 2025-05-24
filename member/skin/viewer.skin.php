@@ -2,6 +2,8 @@
 if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가 
 add_stylesheet('<link rel="stylesheet" href="'.G5_CSS_URL.'/member.css">', 0);
 $is_mine = $member['ch_id'] == $ch_id ? true : false;
+$is_admin = $member['mb_level'] >= 9; // 관리자 권한 체크
+$is_mine_or_admin = $is_mine || $is_admin; // 오너 또는 관리자 여부 확인
 include_once('./_common.php');
 include_once('./_head.php');
 
@@ -128,8 +130,9 @@ include_once('./_head.php');
 	</table>
 <!-- // 캐릭터 기본정보 출력 영역 -->
 
+<!-- 스탯창 자신과 어드민만 확인 가능-->
 <?
-if ($article['ad_use_status'] && $is_mine) { // 내 캐릭터일 때만 실행 ?>
+if ($article['ad_use_status'] && $is_mine_or_admin) { // 내 캐릭터일 때만 실행 ?>
     <hr class="padding" />
     <h3>
         STATUS
@@ -190,20 +193,21 @@ if ($article['ad_use_status'] && $is_mine) { // 내 캐릭터일 때만 실행 ?
 	</div>
 <? } ?>
 
-	<? if($article['ad_use_inven']) { // 인벤토리 출력 ?>
-		<hr class="padding" />
-		<h3>
-			INVENTORY
-		<? if($article['ad_use_money']) { // 소지금 사용시 현재 보유 중인 소지금 출력 ?>
-			<span style="float:right;">
-				<em class="txt-point"><?=$mb['mb_point']?></em><?=$config['cf_money_pice']?>
-			</span>
-		<? } ?>
-		</h3>
-		<div class="theme-box">
-			<? include(G5_PATH."/inventory/list.inc.php"); ?>
-		</div>
-	<? } ?>
+<? if($article['ad_use_inven']) { // 인벤토리 출력 ?>
+    <hr class="padding" />
+    <h3>
+        INVENTORY
+        <? if($article['ad_use_money'] && $is_mine_or_admin) { // 소지금 사용시 현재 보유 중인 소지금 출력 ?>
+            <span style="float:right;">
+                <em class="txt-point"><?=$mb['mb_point']?></em><?=$config['cf_money_pice']?>
+            </span>
+        <? } ?>
+    </h3>
+    <div class="theme-box">
+        <? include(G5_PATH."/inventory/list.inc.php"); ?>
+    </div>
+<? } ?>
+
 
 
 
