@@ -1,7 +1,9 @@
 <?php
 if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가 
 add_stylesheet('<link rel="stylesheet" href="'.G5_CSS_URL.'/member.css">', 0);
-$is_mine = $ch['ch_id'] == $ch_id ? true : false;
+$is_mine = $member['ch_id'] == $ch_id ? true : false;
+include_once('./_common.php');
+include_once('./_head.php');
 
 ?>
 
@@ -127,7 +129,7 @@ $is_mine = $ch['ch_id'] == $ch_id ? true : false;
 <!-- // 캐릭터 기본정보 출력 영역 -->
 
 <?
-if ($article['ad_use_status'] && $is_mine) { // 스탯 설정 ?>
+if ($article['ad_use_status'] && $is_mine) { // 내 캐릭터일 때만 실행 ?>
     <hr class="padding" />
     <h3>
         STATUS
@@ -139,19 +141,17 @@ if ($article['ad_use_status'] && $is_mine) { // 스탯 설정 ?>
         <div class="status-bar">
             <?php
             for ($i = 0; $i < count($status); $i++) {
-                // 내 캐릭터의 스탯만 출력
-                if ($status[$i]['ch_id'] == $ch['ch_id']) {
-                    $status[$i]['has'] = $status[$i]['has'] ? $status[$i]['has'] : $status[$i]['min'];
+                $status[$i]['has'] = isset($status[$i]['has']) ? $status[$i]['has'] : $status[$i]['min'];
 
-                    $status_percent = $status[$i]['max'] ? ($status[$i]['has'] / $status[$i]['max']) * 100 : 0;
-                    $mine_percent = $status[$i]['max'] ? ($status[$i]['now'] / $status[$i]['max']) * 100 : 0;
+                $status_percent = $status[$i]['max'] ? ($status[$i]['has'] / $status[$i]['max']) * 100 : 0;
+                $mine_percent = $status[$i]['max'] ? ($status[$i]['now'] / $status[$i]['max']) * 100 : 0;
 
-                    $resent_use_point += $status[$i]['has'];
+                $resent_use_point += $status[$i]['has'];
 
-                    $sub_text = "";
-                    if ($status[$i]['drop']) {
-                        $sub_text = "(" . $status[$i]['now'] . ")";
-                    }
+                $sub_text = "";
+                if ($status[$i]['drop']) {
+                    $sub_text = "(" . $status[$i]['now'] . ")";
+                }
             ?>
                     <dl>
                         <dt><?=$status[$i]['name']?></dt>
@@ -164,12 +164,12 @@ if ($article['ad_use_status'] && $is_mine) { // 스탯 설정 ?>
                         </dd>
                     </dl>
             <?php
-                }
             }
             ?>
         </div>
     </div>
 <?php } ?>
+
 
 
 <? if($article['ad_use_title']) { // 타이틀 설정 ?>
