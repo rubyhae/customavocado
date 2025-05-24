@@ -12,7 +12,7 @@ if(!$start_area['ma_id']) {
 	alert("지역정보를 확인할 수 없습니다.");
 }
 
-$end_result = sql_query("select * from {$g5['map_table']} where ma_id != '{$ma_id}' and ma_id = ma_parent");
+$end_result = sql_query("select * from {$g5['map_table']} where ma_id != '{$ma_id}'");
 $frm_submit = '<div class="btn_confirm01 btn_confirm">
     <input type="submit" value="확인" class="btn_submit" accesskey="s">
     <a href="./map_list.php">메인으로</a>

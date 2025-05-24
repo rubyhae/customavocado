@@ -188,9 +188,7 @@ $colspan = 13;
 		</td>
 
 		<td>
-			<? if($row['ma_id'] == $row['ma_parent']) { ?>
 				<a href="./map_move_list.php?ma_id=<?=$row['ma_id']?>">통행설정</a>
-			<? } ?>
 		</td>
 		<td>
 		<?
