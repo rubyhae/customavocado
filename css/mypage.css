@@ -9,17 +9,163 @@
 --------------------------------------------------*/
 
 /**************************************************************
-	기본 레이아웃
+	마이페이지 레이아웃 수정 - 사이드바 겹침 및 버튼 수정
 ***************************************************************/
 
-.mypageWrap {padding:20px 0;}
-.mypageInside {position:relative;}
-.my-inner  {max-width:900px; padding:20px; margin:0 auto;}
-
-@media all and (max-width:640px) {
-	.mypageWrap {padding:10px 0px;}
+/* 마이페이지 래퍼 */
+.mypageWrap {
+    padding: 15px 0 !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
 }
 
+/* 마이페이지 메인 컨테이너 */
+.mypageInside {
+    display: flex !important;
+    gap: 20px !important; /* 겹침 방지를 위해 간격 더 증가 */
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 15px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+}
+
+/* 사이드바 - #submenu */
+.mypageInside #submenu {
+    flex: 0 0 200px !important; /* 너비를 200px로 적절히 조정 */
+    background: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(8px) !important;
+    border-radius: 8px !important;
+    padding: 15px !important;
+    height: fit-content !important;
+    position: relative !important;
+    max-width: 200px !important;
+    min-width: 200px !important;
+    margin: 0 !important;
+}
+
+/* 사이드바 내부 요소들 */
+.mypageInside #submenu ul {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+}
+
+.mypageInside #submenu li {
+    margin: 5px 0 !important;
+    padding: 5px 8px !important;
+}
+
+.mypageInside #submenu a {
+    color: #f0f5f3 !important;
+    text-decoration: none !important;
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+    display: block !important;
+}
+
+.mypageInside #submenu a:hover {
+    color: #95c070 !important;
+}
+
+/* 메인 컨텐츠 영역 - #subpage */
+.mypageInside #subpage {
+    flex: 1 !important;
+    background: rgba(0, 0, 0, 0.75) !important;
+    backdrop-filter: blur(8px) !important;
+    border-radius: 8px !important;
+    padding: 20px !important;
+    min-height: 500px !important;
+    max-width: none !important;
+    position: relative !important;
+    margin: 0 !important;
+}
+
+/* #subpage 내부의 .mypage-container */
+.mypageInside #subpage .mypage-container {
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+}
+
+/* 마이페이지 모든 버튼 텍스트 오버플로우 완전 해결 */
+.mypageWrap .ui-btn,
+.mypageInside .ui-btn,
+.mypageInside #subpage .ui-btn,
+.mypage-container .ui-btn,
+body .mypageWrap .ui-btn,
+body .mypageInside .ui-btn {
+    background: #ABB5C9 !important;
+    color: #fff !important;
+    border: 1px solid #9AA4B8 !important;
+    padding: 6px 12px !important;
+    border-radius: 6px !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    transition: all 0.3s ease !important;
+    font-weight: bold !important;
+    font-size: 11px !important;
+    white-space: nowrap !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: 60px !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+    line-height: 1.2 !important;
+}
+
+.mypageWrap .ui-btn:hover,
+.mypageInside .ui-btn:hover,
+.mypageInside #subpage .ui-btn:hover,
+.mypage-container .ui-btn:hover,
+body .mypageWrap .ui-btn:hover,
+body .mypageInside .ui-btn:hover {
+    background: #9AA4B8 !important;
+    transform: translateY(-1px) !important;
+}
+
+.mypageWrap .ui-btn.etc,
+.mypageInside .ui-btn.etc,
+.mypageInside #subpage .ui-btn.etc,
+.mypage-container .ui-btn.etc,
+body .mypageWrap .ui-btn.etc,
+body .mypageInside .ui-btn.etc {
+    background: #B43C3C !important;
+    border-color: #A33333 !important;
+}
+
+.mypageWrap .ui-btn.etc:hover,
+.mypageInside .ui-btn.etc:hover,
+.mypageInside #subpage .ui-btn.etc:hover,
+.mypage-container .ui-btn.etc:hover,
+body .mypageWrap .ui-btn.etc:hover,
+body .mypageInside .ui-btn.etc:hover {
+    background: #A33333 !important;
+}
+
+/* 반응형 - 모바일 */
+@media all and (max-width: 768px) {
+    .mypageInside {
+        flex-direction: column !important;
+        gap: 15px !important;
+        padding: 10px !important;
+        max-width: calc(100% - 40px) !important;
+    }
+
+    .mypageInside #submenu {
+        flex: none !important;
+        position: relative !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .mypageInside #subpage {
+        min-height: 400px !important;
+    }
+}
 
 /**************************************************************
 	캐릭터 작성 폼
@@ -156,7 +302,7 @@
 .inventory-list a {display:block; position:relative; width:40px; height:40px; overflow:hidden;}
 .inventory-list a img {display:block; position:relative; margin:0 auto;}
 .inventory-list a i {display:block; position:absolute; right:1px; bottom:1px; background:rgba(0,0,0,.5); min-width:15px; height:15px; line-height:15px; color:#fff; font-size:10px; font-weight:800; padding:0 1px; text-align:center; z-index:2; box-sizing:border-box; border:none !important;}
-.inventory-list a i.present:before {content:"\e99f"; font-family:'icon'; font-weight:400;} 
+.inventory-list a i.present:before {content:"\e99f"; font-family:'icon'; font-weight:400;}
 
 .title-list {display:block; position:relative; padding:20px 0;}
 .title-list p {padding:5px;}
@@ -249,7 +395,7 @@
 @media all and (max-width: 500px) {
 	.relation-member-list .rm-name			{ padding-right: 0; font-size: 13px; }
 	.relation-member-list .rm-like-style	{ position: relative; width: auto;overflow: hidden; }
-	
+
 	.relation-member-list > li		{ padding-left:0px; }
 	.relation-member-list .ui-thumb	{ width: 50px; }
 	.relation-member-list .info		{ min-height: 62px; margin-left: 60px; }

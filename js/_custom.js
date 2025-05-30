@@ -2,6 +2,37 @@ $(function() {
 	$('img').attr('title', '');
 	$('img[usemap]').rwdImageMaps();
 
+	$('.flexslider').each(function() {
+		var obj = $(this);
+		if($(this).find('li').length > 1) {
+			var effect = $(this).data('effect');
+			var speed = $(this).data('speed');
+			var start = $(this).data('start');
+			var mode = $(this).data('mode');
+			var control = $(this).data('control');
+			var a_spped = $(this).data('animationspeed');
+
+			if(typeof(effect) == 'undefined' || !effect) { effect = 'slide'; }
+			if(typeof(speed) == 'undefined' || !speed) { speed = 3000; }
+			if(typeof(start) == 'undefined' || !start) { start = false; }
+			if(typeof(mode) == 'undefined' || !mode) { mode = 'default'; }
+			if(typeof(control) == 'undefined' || !control) { control = true; }
+			if(typeof(a_spped) == 'undefined' || !a_spped) { a_spped = 700; }
+
+			$(this).flexslider({
+				animation: effect,
+				slideshowSpeed : speed,
+				animationSpeed: a_spped,
+				slideshow: start,
+				directmode:mode,
+				controlNav: control,
+				start: function() {
+					obj.addClass('start');
+				}
+			}).resize();
+		}
+	});
+
 	$('#header_control_box').on('click', function() {
 		$('html').toggleClass('close-header');
 

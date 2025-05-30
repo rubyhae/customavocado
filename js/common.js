@@ -758,16 +758,13 @@ function ajax_load(url, obj, list_id, rel_id, etc_value) {
 		, async: true
 		, url: url+"?keyword="+keyword+"&input_obj="+obj_id+"&output_obj="+rel_id+"&list_obj="+list_id+"&option="+etc_value
 		, beforeSend: function() {
-			//list_obj.empty();
+			list_obj.empty();
 		}
 		, success: function(data) {
 			var response = data.trim();
-			if(response) {
-				list_obj.html(response);
-				list_obj.focus();
-			} else {
-				list_obj.empty();
-			}
+			list_obj.empty();
+			list_obj.append(response);
+			list_obj.focus();
 		}
 		, error: function(data, status, err) { }
 		, complete: function() { }

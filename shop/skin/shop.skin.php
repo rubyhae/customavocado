@@ -4,9 +4,9 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_CSS_URL.'/shop.css">', 0);
 ?>
 
 <div id="shop_page">
-	<div id="shop_npc">
+	<!--<div id="shop_npc">
 		<img src="<?=G5_IMG_URL?>/shop/npc.png" />
-	</div>
+	</div> -->
 
 	<div id="item_info">
 		<div id="default_talk"></div>

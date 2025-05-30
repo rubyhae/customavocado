@@ -1,7 +1,7 @@
-<? 
+<?
 if (!defined('_GNUBOARD_')) exit;
 
-if(!$_COOKIE['intro_close']) { 
+if(!$_COOKIE['intro_close']) {
 	$sql = " select * from {$g5['intro_table']} where '".G5_TIME_YMDHIS."' between bn_begin_time and bn_end_time order by bn_order, bn_id desc ";
 	$result = sql_query($sql);
 	$intro = array();
@@ -9,16 +9,16 @@ if(!$_COOKIE['intro_close']) {
 		$intro[$i] = $row;
 	}
 
-	if(count($intro) > 0) { 
+	if(count($intro) > 0) {
 		add_stylesheet('<link rel="stylesheet" href="'.G5_CSS_URL.'/style.intro.css">', 0);
 	?>
 	<div id="intro_wrap">
-	<? for($i=0; $i < count($intro); $i++) { 
-		
-		
+	<? for($i=0; $i < count($intro); $i++) {
+
+
 		$link = "\"$(this).fadeOut(500, function() { $(this).remove(); }); return false;\"";
 
-		if($i == count($intro)-1) { 
+		if($i == count($intro)-1) {
 			// 마지막 링크일 경우
 			$link = "$('#intro_wrap').fadeOut(500, function() { $(this).remove(); }); set_cookie('intro_close', 'Y', 24, g5_cookie_domain); $('html').addClass('close-intro'); return false;";
 		}
@@ -40,6 +40,6 @@ if(!$_COOKIE['intro_close']) {
 	<? } ?>
 	</div>
 
-	<? } 
+	<? }
 }
 ?>
