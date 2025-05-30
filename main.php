@@ -524,7 +524,7 @@
                         </a>
 
                         <!-- 주식 -->
-                        <a href="<?= G5_URL ?>/stock" class="menu-section menu-frame1">
+                        <a href="<?= G5_URL ?>/item_mix" class="menu-section menu-frame1">
                             <div class="menu-title-en">Item Mix</div>
                             <div class="menu-title-ko">조     합</div>
                         </a>

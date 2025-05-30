@@ -116,7 +116,7 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
         left: 0 !important;
         width: 100% !important;
         height: 100vh !important;
-        z-index: -1 !important;
+        z-index: -10 !important;
         overflow: hidden !important;
         pointer-events: none !important;
     }
@@ -131,6 +131,7 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
         background-position: center !important;
         background-repeat: no-repeat !important;
         will-change: transform !important;
+        pointer-events: none !important;
     }
 
     .layer-1 {
@@ -183,7 +184,7 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
         position: fixed;
         width: 100%;
         height: 100%;
-        z-index: -1;
+        z-index: -9;
         pointer-events: none;
     }
 
@@ -196,6 +197,7 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
         opacity: 0;
         animation: magicFloat 8s infinite ease-in-out;
         box-shadow: 0 0 6px #7ba05b;
+        pointer-events: none;
     }
 
     .particle:nth-child(2n) {
@@ -249,7 +251,7 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
         top: 20px;
         left: 50%;
         transform: translateX(-50%);
-        z-index: 1;
+        z-index: 1105;
         text-align: center;
         width: 100%;
         height: 250px;
@@ -259,6 +261,7 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
         text-decoration: none;
         cursor: pointer;
         transition: all 0.3s ease;
+        pointer-events: auto;
     }
 
     .large-logo:hover {
@@ -289,8 +292,9 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
         left: 0;
         width: 100%;
         height: 80px;
-        z-index: 50;
+        z-index: 200;
         background: transparent;
+        pointer-events: none;
     }
 
     .nav-container {
@@ -301,6 +305,7 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
         align-items: center;
         justify-content: space-between;
         padding: 0 20px;
+        pointer-events: auto;
     }
 
     .nav-left,
@@ -372,10 +377,11 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
         /* 메인 페이지 전용 스타일 */
         #main_body {
             position: relative !important;
-            z-index: 10 !important;
+            z-index: 1000 !important;
             min-height: 100vh !important;
             padding-top: 20px !important;
             background: transparent !important;
+            pointer-events: auto !important;
         }
 
         #no_design_main {
@@ -386,6 +392,29 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
             align-items: center !important;
             min-height: calc(100vh - 20px) !important;
             padding: 60px 40px !important;
+            position: relative !important;
+            z-index: 1001 !important;
+            pointer-events: auto !important;
+        }
+
+        /* 메인 페이지의 모든 요소들이 클릭 가능하도록 */
+        #main_body *,
+        #no_design_main *,
+        .main-content *,
+        .login-section *,
+        .center-grid *,
+        .menu-section *,
+        .mastodon-section * {
+            pointer-events: auto !important;
+            position: relative !important;
+            z-index: inherit !important;
+        }
+
+        /* 메인 컨텐츠 영역 우선순위 강화 */
+        .main-content {
+            position: relative !important;
+            z-index: 1002 !important;
+            pointer-events: auto !important;
         }
 
     <?php } else { ?>
@@ -394,40 +423,7 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
             padding-top: 370px !important;
         }
 
-        /* 서브페이지 컨테이너 - 일반 페이지용 */
-        #body>.fix-layout:first-child:not(.mypageWrap .fix-layout) {
-            background: rgba(0, 0, 0, 0.75) !important;
-            backdrop-filter: blur(8px) !important;
-            border-radius: 12px !important;
-            padding: 25px !important;
-            margin: 15px auto !important;
-            max-width: 800px !important;
-            position: relative !important;
-            z-index: 10 !important;
-        }
-
-        /* 텍스트 색상 개선 - 일반 페이지용 */
-        #body>.fix-layout:first-child:not(.mypageWrap .fix-layout),
-        #body>.fix-layout:first-child:not(.mypageWrap .fix-layout) * {
-            color: #f0f5f3 !important;
-        }
-
-        /* 입력 요소는 검은 배경 유지 - 일반 페이지용 */
-        #body>.fix-layout:first-child:not(.mypageWrap .fix-layout) input,
-        #body>.fix-layout:first-child:not(.mypageWrap .fix-layout) textarea,
-        #body>.fix-layout:first-child:not(.mypageWrap .fix-layout) select {
-            background: rgba(255, 255, 255, 0.95) !important;
-            color: #000 !important;
-        }
-
-        /* 링크 색상 - 일반 페이지용 */
-        #body>.fix-layout:first-child:not(.mypageWrap .fix-layout) a {
-            color: #95c070 !important;
-        }
-
-        #body>.fix-layout:first-child:not(.mypageWrap .fix-layout) a:hover {
-            color: #7ba05b !important;
-        }
+        /* 서브페이지 컨테이너 - 삭제된 부분 (인벤토리와 충돌) */
 
     <?php } ?>
 
@@ -472,21 +468,12 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
         <?php } ?>
     }
 
-#load_log_board {
-    max-width: 1000px; /* 적당한 넓이 */
-    width: 90%; /* 작은 화면에서 유연성 */
-    margin: 15px auto; /* 중앙 정렬 */
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(8px);
-    border-radius: 12px;
-}
-
-/* shop_page 영역 넓이 제한 */
+/* 필요한 부분만 간단히 */
+#load_log_board,
 #shop_page {
-    max-width: 1000px; /* 원하는 넓이로 조정 */
-    width: 90%; /* 작은 화면에서 유연성 */
-    margin: 0 auto; /* 중앙 정렬 */
+    max-width: 1000px;
+    width: 90%;
+    margin: 15px auto;
     padding: 20px;
     background: rgba(0, 0, 0, 0.75);
     backdrop-filter: blur(8px);
@@ -495,110 +482,45 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
     z-index: 10;
 }
 
-/* shop_page 내부 요소들 조정 */
-#shop_npc {
-    text-align: center;
-    margin-bottom: 20px;
+/* BGM 플레이어 iframe 컨테이너 */
+#bgm-container {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 400px;
+    height: 400px;
+    pointer-events: none;
+    z-index: 999;
 }
 
-#shop_npc img {
-    max-width: 200px; /* NPC 이미지 크기 조정 */
-    height: auto;
+#bgm-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    pointer-events: auto;
 }
 
-#item_info {
-    margin-bottom: 20px;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
+/* 메뉴바와 로고 클릭 우선순위 */
+.top-navigation {
+    z-index: 1100;
+    pointer-events: none;
 }
 
-#item_list_box {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    padding: 15px;
+.nav-container {
+    position: relative;
+    z-index: 1101;
+    pointer-events: auto;
 }
 
-/* 카테고리 버튼들 */
-#shop_cate ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 20px;
+.nav-item, .nav-logo {
+    position: relative;
+    z-index: 1102;
+    pointer-events: auto;
 }
 
-#shop_cate li {
-    list-style: none;
-}
-
-/* 아이템 리스트 그리드 조정 */
-#shop_item_list ul {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 15px;
-    padding: 0;
-    margin: 0;
-}
-
-#shop_item_list li {
-    list-style: none;
-    text-align: center;
-}
-
-#shop_item_list li a {
-    display: block;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    text-decoration: none;
-    color: #f0f5f3;
-    transition: all 0.3s ease;
-}
-
-#shop_item_list li a:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-}
-
-#shop_item_list img {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 4px;
-    margin-bottom: 8px;
-}
-
-#shop_item_list span {
-    display: block;
-    font-size: 12px;
-    word-break: keep-all;
-}
-
-/* 페이징 */
-#shop_paging {
-    text-align: center;
-    margin-top: 20px;
-}
-
-/* 반응형 처리 */
-@media (max-width: 768px) {
-    #shop_page {
-        max-width: none;
-        width: 95%;
-        margin: 10px auto;
-        padding: 15px;
-    }
-
-    #shop_item_list ul {
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-        gap: 10px;
-    }
-
-    #shop_cate ul {
-        flex-direction: column;
-        align-items: center;
-    }
+.large-logo {
+    z-index: 1105 !important;
+    pointer-events: auto !important;
 }
 </style>
 
@@ -685,14 +607,16 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
                 <span class="nav-en">SHOP</span>
                 <span class="nav-ko">상 점</span>
             </a>
-            <!-- 테스트용 임시링크 -->
-            <a href="<?= G5_URL ?>/item_mix" class="nav-item">
-                <span class="nav-en">TEST</span>
-                <span class="nav-ko">테스트중</span>
-            </a>
         </div>
     </div>
 </nav>
+
+<!-- BGM 플레이어 -->
+<?php if ($config['cf_bgm'] && $config['cf_bgm'] != '') { ?>
+<div id="bgm-container">
+    <iframe id="bgm-frame" src="<?= G5_URL ?>/bgm.php?action=play" allowfullscreen></iframe>
+</div>
+<?php } ?>
 
 <script>
     // 공통 JavaScript
@@ -704,8 +628,6 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
             document.body.style.overflowY = 'auto';
             document.body.style.minHeight = '150vh';
         }
-
-        // head.php의 JavaScript 부분에서 패럴랙스 함수를 이것으로 교체하세요
 
         // 패럴랙스 효과 (수정된 버전)
         function updateParallax() {
@@ -758,5 +680,8 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
 
         // 마법 파티클 생성 시작
         setInterval(createMagicParticle, 2000);
+
+        // 스크롤 이벤트 (패럴랙스 효과)
+        window.addEventListener('scroll', updateParallax, { passive: true });
     });
 </script>

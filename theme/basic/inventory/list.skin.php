@@ -4,7 +4,7 @@ if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 
 
 <ul class="inventory-list">
-<? 
+<?
 for($i=0; $i < count($inven_list); $i++) { ?>
 	<li class="box-line bak">
 <? if($inven_list[$i]['in_id']){ ?>
@@ -19,9 +19,9 @@ for($i=0; $i < count($inven_list); $i++) { ?>
 		</a>
 <? } ?>
 	</li>
-<? } 
+<? }
 
-if($i == 0) { 
+if($i == 0) {
 ?>
 	<li class="no-data">
 		보유중인 아이템이 없습니다.
