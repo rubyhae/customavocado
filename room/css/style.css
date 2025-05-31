@@ -20,7 +20,7 @@
 .objList.trans.open.theme-box {
     display: block !important;
     position: absolute !important;
-    top: 370px !important;
+    top: 120px !important; /* 370px에서 120px로 변경 - 네비게이션 바로 아래 */
     bottom: 0 !important;
     right: 0 !important;
     width: 200px !important;
@@ -148,4 +148,3 @@
 
 	#room_area {position:relative; top:auto; left:auto; margin:0 auto; transform:translate(0, 0); -webkit-transform:translate(0, 0);}
 }
-

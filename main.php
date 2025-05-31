@@ -56,7 +56,7 @@
             gap: 0 !important;
         }
 
-        /* 메인 컨텐츠 영역 - 모든 섹션 높이 강제 통일 */
+        /* 메인 컨텐츠 영역 - 로고 크기 변경에 맞춰 더 아래로 */
         .main-content {
             width: 100%;
             max-width: 1000px;
@@ -65,7 +65,7 @@
             gap: 0;
             align-items: stretch;
             justify-content: stretch;
-            margin-top: 370px;
+            margin-top: 400px; /* 370px에서 620px로 변경 (로고 500px + 네비 80px + 여백 40px) */
             height: 300px;
         }
 
@@ -400,7 +400,7 @@
                 grid-template-columns: 1fr 1fr 1fr;
                 grid-template-rows: auto auto;
                 gap: 15px;
-                margin-top: 320px;
+                margin-top:400px; /* 320px에서 570px로 변경 */
             }
 
             .center-grid {
@@ -424,7 +424,7 @@
             .main-content {
                 grid-template-columns: 1fr;
                 padding: 20px;
-                margin-top: 280px;
+                margin-top:40px; /* 280px에서 530px로 변경 */
             }
 
             .center-grid {
@@ -518,14 +518,26 @@
                         </a>
 
                         <!-- 마이룸 -->
-                        <a href="<?= G5_URL ?>/bbs/content.php?co_id=room" class="menu-section menu-frame2">
+                        <?php
+                        // 로그인한 사용자의 캐릭터 ID 가져오기
+                        $ch_id = 0;
+                        if ($is_member) {
+                            $char_sql = "SELECT ch_id FROM avo_character WHERE mb_id = '{$member['mb_id']}' ORDER BY ch_id DESC LIMIT 1";
+                            $char_result = sql_fetch($char_sql);
+                            if ($char_result) {
+                                $ch_id = $char_result['ch_id'];
+                            }
+                        }
+                        ?>
+                        <a href="<?=G5_URL?>/room/index.php?ch_id=<?=$ch_id?>" class="menu-section menu-frame2">
                             <div class="menu-title-en">My Room</div>
                             <div class="menu-title-ko">마 이 룸</div>
                         </a>
 
-                        <!-- 주식 -->
+
+                        <!-- 조합 -->
                         <a href="<?= G5_URL ?>/item_mix" class="menu-section menu-frame1">
-                            <div class="menu-title-en">Item Mix</div>
+                            <div class="menu-title-en">Combination</div>
                             <div class="menu-title-ko">조     합</div>
                         </a>
                     </div>

@@ -16,76 +16,77 @@ if($action == "play") {
             box-sizing: border-box;
         }
 
-        body {
+body {
             background: transparent;
             font-family: 'GowunDodum', 'Malgun Gothic', '맑은 고딕', sans-serif;
             overflow: hidden;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .bgm-player {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
+.bgm-player {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    height: auto;
+}
 
-        .mini-item {
-            list-style: none;
-            position: relative;
-            display: inline-block;
-        }
+.mini-item {
+    list-style: none;
+    position: relative;
+    display: inline-block;
+}
 
-        /* 회전 텍스트 컨테이너 */
-        .rotating-text-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 120px;
-            height: 120px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
+        /* 회전 텍스트 컨테이너 - 버튼보다 살짝 크게 */
+.rotating-text-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
 
         .mini-item:hover .rotating-text-container {
             opacity: 1;
         }
 
-        .rotating-text {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            animation: rotate 10s linear infinite;
-        }
+.rotating-text {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    animation: rotate 10s linear infinite;
+}
 
-        .rotating-text span {
-            position: absolute;
-            left: 50%;
-            font-size: 12px;
-            font-weight: bold;
-            color: #33446b;
-            transform-origin: 0 60px;
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-        }
-
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
+.rotating-text span {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    font-size: 8px;
+    font-weight: bold;
+    color: #33446b;
+    transform-origin: 0 50px;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
 
         .music_btn {
-            width: 60px;
-            height: 60px;
+            width: 55px;
+            height: 55px;
             border-radius: 50%;
             background: linear-gradient(145deg, #e0e5ec, #c7cdd8);
             box-shadow:
-                6px 6px 12px rgba(163, 177, 198, 0.6),
-                -6px -6px 12px rgba(255, 255, 255, 0.8);
+                4px 4px 8px rgba(163, 177, 198, 0.6),
+                -4px -4px 8px rgba(255, 255, 255, 0.8);
             border: none;
             cursor: pointer;
             display: flex;
@@ -222,18 +223,23 @@ if($action == "play") {
         let isPlaying = false;
         let isPlayerReady = false;
 
-        // 회전 텍스트 생성
-        function createRotatingText() {
-            const text = "Iss guh day thoo avorneen slawn ";
-            const rotatingTextElement = document.getElementById('rotatingText');
+// 회전 텍스트 생성
+function createRotatingText() {
+    const text = "Iss guh day thoo avorneen slawn ";
+    const rotatingTextElement = document.getElementById('rotatingText');
 
-            for (let i = 0; i < text.length; i++) {
-                const span = document.createElement('span');
-                span.textContent = text[i];
-                span.style.transform = `rotate(${i * (360 / text.length)}deg)`;
-                rotatingTextElement.appendChild(span);
-            }
-        }
+    // 기존 내용 초기화
+    rotatingTextElement.innerHTML = '';
+
+    for (let i = 0; i < text.length; i++) {
+        const span = document.createElement('span');
+        span.textContent = text[i];
+        // 각 글자를 원형으로 균등하게 배치
+        const angle = (i * 360) / text.length;
+        span.style.transform = `rotate(${angle}deg)`;
+        rotatingTextElement.appendChild(span);
+    }
+}
 
         // YouTube API 로드
         function onYouTubeIframeAPIReady() {

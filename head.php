@@ -1,4 +1,5 @@
-<?php
+<section id="body">
+    <div class="fix-layout"><?php
 if (!defined('_GNUBOARD_'))
     exit; // 개별 페이지 접근 불가
 
@@ -92,91 +93,11 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
     }
 
     body {
-        background: linear-gradient(135deg, #1a4a4a 0%, #0d2d2d 30%, #1f3f3f 70%, #0a1f1f 100%) !important;
         color: #f0f5f3 !important;
         font-family: 'GowunDodum', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif !important;
         min-height: 100vh !important;
         position: relative !important;
         overflow-x: hidden !important;
-    }
-
-    /* 기존 헤더 숨기기 */
-    #header,
-    #gnb_wrapper,
-    #gnb_control_box,
-    .mini-menu,
-    .mob_open {
-        display: none !important;
-    }
-
-    /* 패럴랙스 배경 */
-    .parallax-background {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100vh !important;
-        z-index: -10 !important;
-        overflow: hidden !important;
-        pointer-events: none !important;
-    }
-
-    .parallax-layer {
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 120vh !important;
-        background-size: cover !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
-        will-change: transform !important;
-        pointer-events: none !important;
-    }
-
-    .layer-1 {
-        background-image: url('<?= G5_URL ?>/img/layer1.png') !important;
-        opacity: 0.8 !important;
-    }
-
-    .layer-2 {
-        background-image: url('<?= G5_URL ?>/img/layer2.png') !important;
-        opacity: 0.7 !important;
-    }
-
-    .layer-3 {
-        background-image: url('<?= G5_URL ?>/img/layer3.png') !important;
-        opacity: 0.6 !important;
-    }
-
-    .layer-4 {
-        background-image: url('<?= G5_URL ?>/img/layer4.png') !important;
-        opacity: 0.5 !important;
-    }
-
-    .layer-5 {
-        background-image: url('<?= G5_URL ?>/img/layer5.png') !important;
-        opacity: 0.4 !important;
-    }
-
-    .layer-6 {
-        background-image: url('<?= G5_URL ?>/img/layer6.png') !important;
-        opacity: 0.3 !important;
-    }
-
-    .layer-7 {
-        background-image: url('<?= G5_URL ?>/img/layer7.png') !important;
-        opacity: 0.2 !important;
-    }
-
-    .layer-8 {
-        background-image: url('<?= G5_URL ?>/img/layer8.png') !important;
-        opacity: 0.15 !important;
-    }
-
-    .layer-9 {
-        background-image: url('<?= G5_URL ?>/img/layer9.png') !important;
-        opacity: 0.1 !important;
     }
 
     /* 마법의 파티클들 */
@@ -245,7 +166,8 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
         }
     }
 
-    /* 대형 로고 */
+    /* 메인 페이지 대형 로고 - 메인 페이지에서만 표시 */
+    <?php if ($is_main_page) { ?>
     .large-logo {
         position: fixed;
         top: 20px;
@@ -254,7 +176,7 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
         z-index: 1105;
         text-align: center;
         width: 100%;
-        height: 250px;
+        height: 340px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -285,10 +207,10 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
         text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
     }
 
-    /* 상단 네비게이션 */
+    /* 메인 페이지 상단 네비게이션 */
     .top-navigation {
         position: fixed;
-        top: 290px;
+        top: 380px;
         left: 0;
         width: 100%;
         height: 80px;
@@ -296,6 +218,27 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
         background: transparent;
         pointer-events: none;
     }
+
+    <?php } else { ?>
+
+    /* 서브 페이지 - 대형 로고 숨김 */
+    .large-logo {
+        display: none !important;
+    }
+
+    /* 서브 페이지 상단 네비게이션 - 아이콘들 위에 위치 */
+    .top-navigation {
+        position: fixed;
+        top: 20px;
+        left: 0;
+        width: 100%;
+        height: 80px;
+        z-index: 200;
+        background: transparent;
+        pointer-events: none;
+    }
+
+    <?php } ?>
 
     .nav-container {
         height: 100%;
@@ -379,7 +322,7 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
             position: relative !important;
             z-index: 1000 !important;
             min-height: 100vh !important;
-            padding-top: 20px !important;
+            padding-top: 120px !important; /* 네비게이션 공간만 확보 */
             background: transparent !important;
             pointer-events: auto !important;
         }
@@ -390,7 +333,7 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
-            min-height: calc(100vh - 20px) !important;
+            min-height: calc(100vh - 120px) !important;
             padding: 60px 40px !important;
             position: relative !important;
             z-index: 1001 !important;
@@ -420,122 +363,190 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
     <?php } else { ?>
 
         body {
-            padding-top: 370px !important;
+            padding-top: 120px !important; /* 서브페이지도 네비게이션 공간만 확보 */
         }
-
-        /* 서브페이지 컨테이너 - 삭제된 부분 (인벤토리와 충돌) */
 
     <?php } ?>
 
     /* 반응형 */
     @media (max-width: 768px) {
-        .large-logo-text {
-            font-size: 32px;
-            letter-spacing: 8px;
+        <?php if ($is_main_page) { ?>
+        .top-navigation {
+            top: 10px;
+            height: 60px;
+        }
+        <?php } else { ?>
+        .top-navigation {
+            top: 10px;
+            height: 60px;
+        }
+        <?php } ?>
+
+        .nav-container {
+            padding: 0 10px;
         }
 
-        .top-navigation {
-            top: 200px;
-            height: 40px;
+        .nav-left,
+        .nav-right {
+            gap: 15px;
+        }
+
+        .nav-item .nav-en {
+            font-size: 14px;
+        }
+
+        .nav-item .nav-ko {
+            font-size: 9px;
+        }
+
+        .nav-logo {
+            width: 60px;
+            height: 60px;
         }
 
         <?php if ($is_main_page) { ?>
-            .main-content {
-                flex-direction: column;
-                padding: 20px;
-                margin-top: 280px;
-                height: auto;
+            #main_body {
+                padding-top: 20px !important;
             }
 
-            .center-grid {
-                flex-direction: column;
-                gap: 10px;
-                height: auto;
-            }
-
-            .login-section,
-            .menu-section,
-            .mastodon-section {
-                height: 200px;
-                margin-bottom: 10px;
+            #no_design_main {
+                min-height: calc(100vh - 20px) !important;
+                padding: 60px 40px !important;
             }
 
         <?php } else { ?>
             body {
-                padding-top: 280px !important;
+                padding-top: 80px !important;
             }
 
         <?php } ?>
     }
 
 /* 필요한 부분만 간단히 */
-#load_log_board,
-#shop_page {
-    max-width: 1000px;
-    width: 90%;
-    margin: 15px auto;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(8px);
-    border-radius: 12px;
-    position: relative;
-    z-index: 10;
-}
+    #load_log_board,
+    #shop_page {
+        max-width: 1000px;
+        width: 90%;
+        margin: 15px auto;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(8px);
+        border-radius: 12px;
+        position: relative;
+        z-index: 10;
+    }
 
-/* BGM 플레이어 iframe 컨테이너 */
+    /* fix-layout 컨테이너 - 모든 페이지에 마진 적용 */
+    .fix-layout {
+        max-width: 1000px;
+        width: 90%;
+        margin: 0 auto;
+        padding: 20px;
+        position: relative;
+        z-index: 10;
+    }
+
+    /* 캐릭터 프로필 페이지 전용 스타일 */
+    #character_profile {
+        background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(8px);
+        border-radius: 12px;
+        padding: 30px;
+        margin: 20px 0;
+    }
+
+    /* 전신 이미지 크기 조정 */
+    #character_body img {
+        max-width: 300px;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+    /* 캐릭터 이미지 영역 가운데 정렬 */
+    .visual-area {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    #character_body,
+    #character_head {
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    /* 반응형 디자인 */
+    @media (max-width: 768px) {
+        .fix-layout {
+            width: 95%;
+            padding: 15px;
+        }
+
+        #character_profile {
+            padding: 20px;
+            margin: 10px 0;
+        }
+
+        #character_body img {
+            max-width: 250px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .fix-layout {
+            width: 98%;
+            padding: 10px;
+        }
+
+        #character_profile {
+            padding: 15px;
+        }
+
+        #character_body img {
+            max-width: 200px;
+        }
+    }
+
+/* BGM 플레이어 컨테이너 - 회전 텍스트까지 딱 맞게 */
 #bgm-container {
     position: fixed;
-    bottom: 0;
-    right: 0;
-    width: 400px;
-    height: 400px;
-    pointer-events: none;
+    bottom: 20px;
+    right: 20px;
+    width: 120px;
+    height: 120px;
     z-index: 999;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    border: none;
+    background: transparent;
 }
 
 #bgm-frame {
     width: 100%;
     height: 100%;
     border: none;
-    pointer-events: auto;
+    background: transparent;
 }
 
-/* 메뉴바와 로고 클릭 우선순위 */
-.top-navigation {
-    z-index: 1100;
-    pointer-events: none;
+/* 모바일에서 BGM 플레이어 크기 조정 */
+@media (max-width: 768px) {
+    #bgm-container {
+        width: 85px;
+        height: 85px;
+        bottom: 15px;
+        right: 15px;
+    }
 }
 
-.nav-container {
-    position: relative;
-    z-index: 1101;
-    pointer-events: auto;
-}
-
-.nav-item, .nav-logo {
-    position: relative;
-    z-index: 1102;
-    pointer-events: auto;
-}
-
-.large-logo {
-    z-index: 1105 !important;
-    pointer-events: auto !important;
+@media (max-width: 480px) {
+    #bgm-container {
+        width: 75px;
+        height: 75px;
+        bottom: 10px;
+        right: 10px;
+    }
 }
 </style>
-
-<!-- 패럴랙스 배경 -->
-<div class="parallax-background">
-    <div class="parallax-layer layer-1" data-speed="0.1"></div>
-    <div class="parallax-layer layer-2" data-speed="0.2"></div>
-    <div class="parallax-layer layer-3" data-speed="0.3"></div>
-    <div class="parallax-layer layer-4" data-speed="0.4"></div>
-    <div class="parallax-layer layer-5" data-speed="0.5"></div>
-    <div class="parallax-layer layer-6" data-speed="0.6"></div>
-    <div class="parallax-layer layer-7" data-speed="0.7"></div>
-    <div class="parallax-layer layer-8" data-speed="0.8"></div>
-    <div class="parallax-layer layer-9" data-speed="0.9"></div>
-</div>
 
 <!-- 마법의 파티클들 -->
 <div class="magic-particles">
@@ -556,12 +567,13 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
     <div class="particle" style="left: 90%; animation-delay: 5.5s;"></div>
 </div>
 
+<!-- 메인 페이지에서만 대형 로고 표시 -->
+<?php if ($is_main_page) { ?>
 <!-- 대형 로고 -->
 <a href="<?= G5_URL ?>/" class="large-logo">
-    <img src="<?= G5_URL ?>/img/large_logo.png" alt="Large Logo"
-        onerror="this.style.display='none'; this.parentNode.querySelector('.large-logo-text').style.display='block';" />
-    <div class="large-logo-text" style="display: none;">LARGE LOGO</div>
+    <img src="<?= G5_URL ?>/img/large_logo.png" alt="아보카도 에디션 로고" />
 </a>
+<?php } ?>
 
 <!-- 상단 네비게이션 -->
 <nav class="top-navigation">
@@ -629,27 +641,6 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
             document.body.style.minHeight = '150vh';
         }
 
-        // 패럴랙스 효과 (수정된 버전)
-        function updateParallax() {
-            const scrollTop = window.pageYOffset;
-            const parallaxLayers = document.querySelectorAll('.parallax-layer');
-
-            // 메인 컨텐츠가 있는지 확인
-            const mainContent = document.querySelector('.main-content');
-
-            parallaxLayers.forEach(function (layer) {
-                const speed = parseFloat(layer.dataset.speed);
-                let yPos = -(scrollTop * speed);
-
-                // 메인 컨텐츠 영역에서는 패럴랙스 효과 제한
-                if (mainContent && scrollTop > 200) {
-                    yPos = Math.max(yPos, -100);
-                }
-
-                layer.style.transform = `translate3d(0, ${yPos}px, 0)`;
-            });
-        }
-
         // 마법 파티클 생성
         function createMagicParticle() {
             const particle = document.createElement('div');
@@ -676,12 +667,8 @@ $is_main_page = (defined('_MAIN_') && _MAIN_ === true);
 
         // 초기화
         enableScroll();
-        updateParallax();
 
         // 마법 파티클 생성 시작
         setInterval(createMagicParticle, 2000);
-
-        // 스크롤 이벤트 (패럴랙스 효과)
-        window.addEventListener('scroll', updateParallax, { passive: true });
     });
 </script>

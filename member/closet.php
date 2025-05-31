@@ -1,80 +1,64 @@
 <?php
 include_once('./_common.php');
-if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가 
-$cl_count = sql_fetch("select count(*) as cnt from {$g5['closthes_table']} where ch_id = '{$ch_id}'");
-$cl_count = $cl_count['cnt'];
-$cl_result = sql_query("select * from {$g5['closthes_table']} where ch_id = '{$ch_id}' order by cl_id asc");
-?>
-
-<div class="closet-list">
-
-<? if($cl_count > 0) { ?>
-
-<? for($i=0; $row=sql_fetch_array($cl_result); $i++) { 
-	$class = "";
-
-	$class .= $row['cl_type'];
-	if($row['cl_use'] == '1') { 
-		$class .=' selected ';
-	}
-?>
-<li class="cl_item <?=$class?>">
- 
- <? if($row['cl_type'] =='default'){ ?>
-        			<? if($is_admin){?>
-                <p class="ui-btn-box">
-                 <a href="../mypage/character/closet_update.php?w=u&amp;cl_id=<?=$row['cl_id']?>&amp;ch_id=<?=$ch_id?>" class="ui-btn btn-use">적용</a>
-                </p>
-            <? }?>
- 
-    <a href="<?=$row['cl_path']?>"  onclick="view_body('<?=$row['cl_path']?>'); return false;">
-			 <p class="clname"> DEFAULT </p> 
-			</a>	
- 
-		 <? }else{?>
-      			<? if($is_admin){?>
-			<p class="ui-btn-box">
-				<a href="../mypage/character/closet_update.php?w=u&amp;cl_id=<?=$row['cl_id']?>&amp;ch_id=<?=$ch_id?>" class="ui-btn btn-use">적용</a>
-				<? if($row['cl_type'] !='default'){ ?>
-    <a href="../mypage/character/closet_update.php?w=d&amp;cl_id=<?=$row['cl_id']?>&amp;ch_id=<?=$ch_id?>" onclick="return confirm('삭제한 데이터는 복구할 수 없습니다. 정말 삭제하시겠습니까?');" class="ui-btn btn-del">삭제</a>
-                <? } ?>
-			</p>
-            <? }?>
- 
-   <a href="<?=$row['cl_path']?>"  onclick="view_body('<?=$row['cl_path']?>'); return false;">
-     <p class="clname"> <?=$row['cl_subject']?> </p>
-			</a>
-  
-         <? } ?>
-</li>
-<? } ?>
-
-<? } ?>
- </div>
-        <? if($is_admin){?>
-<p class="addcl ui-btn point" onclick="$('.add').toggleClass('on');"> 추가 </p>
-        <div class="add">
-            <div class="add_menu">
-            <p>이름</p>
-            <p>전신</p>
-            </div>
-        <form action="<?=G5_URL?>/mypage/character/closet_update.php" method="post" name="frm_closet" id="frm_closet" enctype="multipart/form-data" >
-            <input type="hidden" name="ch_id" value="<?=$ch_id?>" />
-        
-            <fieldset>
-                <input type="text" name="cl_subject" id="cl_sibject" value="" class="full" placeholder="전신 이름" style="width:80%;" />
-                <input type="file" name="cl_path_file" id="cl_path_file" value="" class="full" style="width:80%;" />
-                <input type="submit" value="추가" class="ui-btn point" style="float: right;  top: -30px;  width: 20%;  height: 60px; border-radius: 0;"/>
-            </fieldset>
-        </form>
-        </div>
-        <? }?>
- 
-
-<script>
-function view_body(_url){
- $('#openMask').empty().html('<img src="'+_url+'">');
- 
+$ch = sql_fetch("select * from {$g5['character_table']} where ch_id=".$ch_id);
+if(!$ch['ch_id']) {
+	alert("캐릭터 정보가 존재하지 않습니다.");
 }
+
+$g5['title'] = $ch['ch_name']." 옷장";
+
+include_once('./_head.sub.php');
+add_stylesheet('<link rel="stylesheet" href="'.G5_CSS_URL.'/closet.css">', 0);
+
+$cl = array();
+$cl_result = sql_query("select * from {$g5['closthes_table']} where ch_id = '{$ch_id}' order by cl_type desc, cl_id asc");
+$str_array_data = "";
+$array_data = "";
+for($i=0; $row=sql_fetch_array($cl_result); $i++) {
+	$cl[$i] = $row;
+	$array_data .= "{$str_array_data}'{$row['cl_subject']}'";
+	$str_array_data = ",";
+}
+
+?>
+
+<div id="closet_page" class="none-trans">
+	<div class="closet-menu theme-box">
+		<div class="pager"></div>
+	</div>
+
+	<div class="swiper-container">
+		<ul class="swiper-wrapper">
+	<? for($i=0; $i < count($cl); $i++) { ?>
+			<li class="swiper-slide">
+				<a href="<?=$cl[$i]['cl_path']?>" onclick="window.open(this.href, 'big_viewer', 'width=500 height=800 menubar=no status=no toolbar=no location=no scrollbars=yes resizable=yes'); return false;" style="background-image:url(<?=$cl[$i]['cl_path']?>);"></a>
+			</li>
+	<? } ?>
+		</ul>
+	</div>
+</div>
+
+<script src="<?php echo G5_JS_URL ?>/swiper.js"></script>
+<script>
+var cl_name = [<?=$array_data?>];
+$(function() {
+	var swiper = new Swiper("#closet_page .swiper-container", {
+		loop:true,
+		pagination: {
+			el: "#closet_page .pager",
+			clickable: true,
+			renderBullet: function (index, className) {
+				return '<span class="' + className + '">' + cl_name[index] + "</span>";
+			}
+		},
+		autoplay: {
+			delay: 4500,
+			disableOnInteraction: false,
+		},
+	});
+});
 </script>
 
+<?php
+include_once('./_tail.sub.php');
+?>
